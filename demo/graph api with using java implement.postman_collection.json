@@ -1,0 +1,86 @@
+{
+	"info": {
+		"_postman_id": "d287ecd5-e500-472d-bb67-2e0e16d2ae8a",
+		"name": "graph api with using java implement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33736978",
+		"_collection_link": "https://lively-firefly-6887-1.postman.co/workspace/Team-Workspace~8c824f2c-7dc3-491f-8fb2-b8021f44f523/collection/33736978-d287ecd5-e500-472d-bb67-2e0e16d2ae8a?action=share&source=collection_link&creator=33736978"
+	},
+	"item": [
+		{
+			"name": "localhost:9002/email/harshad.bhadane@neoquant.com",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subject\": \"daily call2\",\r\n    \"body\": {\r\n        \"contentType\": \"HTML\",\r\n        \"content\": \"Does this time work for you?\"\r\n    },\r\n    \"start\": {\r\n        \"dateTime\": \"2024-06-20T13:10:00\",\r\n        \"timeZone\": \"Asia/Kolkata\"\r\n    },\r\n    \"end\": {\r\n        \"dateTime\": \"2024-06-20T14:10:30\",\r\n        \"timeZone\": \"Asia/Kolkata\"\r\n    },\r\n    \"location\": {\r\n        \"displayName\": \"Nq team Dev test\"\r\n    },\r\n    \"attendees\": [\r\n        {\r\n            \"emailAddress\": {\r\n                \"address\": \"aditya.verma@neoquant.com\",\r\n                \"name\": \"Adele Vance\"\r\n            },\r\n            \"type\": \"required\"\r\n        }\r\n    ],\r\n    \"allowNewTimeProposals\": true,\r\n    \"isOnlineMeeting\": true,\r\n    \"onlineMeetingProvider\": \"teamsForBusiness\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9002/email/harshad.bhadane@neoquant.com",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"email",
+						"harshad.bhadane@neoquant.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9002/harshad.bhadane@neoquant.com/AAMkAGJiZmE1ZThiLWRjYmYtNGYzNi1hYjE3LTQxMGIzYmM0ZDExNgBGAAAAAAD4Z-hSDVayRbgQXxMjfeWLBwCtbdAsS5mJR4OFqyRcD-W6AAAAAAENAACtbdAsS5mJR4OFqyRcD-W6AADWdFIEAAA=",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9002/harshad.bhadane@neoquant.com/AAMkAGJiZmE1ZThiLWRjYmYtNGYzNi1hYjE3LTQxMGIzYmM0ZDExNgBGAAAAAAD4Z-hSDVayRbgQXxMjfeWLBwCtbdAsS5mJR4OFqyRcD-W6AAAAAAENAACtbdAsS5mJR4OFqyRcD-W6AADWdFIEAAA=",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"harshad.bhadane@neoquant.com",
+						"AAMkAGJiZmE1ZThiLWRjYmYtNGYzNi1hYjE3LTQxMGIzYmM0ZDExNgBGAAAAAAD4Z-hSDVayRbgQXxMjfeWLBwCtbdAsS5mJR4OFqyRcD-W6AAAAAAENAACtbdAsS5mJR4OFqyRcD-W6AADWdFIEAAA="
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9002/harshad.bhadane@neoquant.com/AAMkAGJiZmE1ZThiLWRjYmYtNGYzNi1hYjE3LTQxMGIzYmM0ZDExNgBGAAAAAAD4Z-hSDVayRbgQXxMjfeWLBwCtbdAsS5mJR4OFqyRcD-W6AAAAAAENAACtbdAsS5mJR4OFqyRcD-W6AADWdFIFAAA=",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subject\": \"daily call2\",\r\n    \"body\": {\r\n        \"contentType\": \"HTML\",\r\n        \"content\": \"Does this time work for you?\"\r\n    },\r\n    \"start\": {\r\n        \"dateTime\": \"2024-06-20T13:10:00\",\r\n        \"timeZone\": \"Asia/Kolkata\"\r\n    },\r\n    \"end\": {\r\n        \"dateTime\": \"2024-06-20T14:10:30\",\r\n        \"timeZone\": \"Asia/Kolkata\"\r\n    },\r\n    \"location\": {\r\n        \"displayName\": \"Nq team Dev test\"\r\n    },\r\n    \"attendees\": [\r\n        {\r\n            \"emailAddress\": {\r\n                \"address\": \"aditya.verma@neoquant.com\",\r\n                \"name\": \"Adele Vance\"\r\n            },\r\n            \"type\": \"required\"\r\n        }\r\n    ],\r\n    \"allowNewTimeProposals\": true,\r\n    \"isOnlineMeeting\": true,\r\n    \"onlineMeetingProvider\": \"teamsForBusiness\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9002/harshad.bhadane@neoquant.com/AAMkAGJiZmE1ZThiLWRjYmYtNGYzNi1hYjE3LTQxMGIzYmM0ZDExNgBGAAAAAAD4Z-hSDVayRbgQXxMjfeWLBwCtbdAsS5mJR4OFqyRcD-W6AAAAAAENAACtbdAsS5mJR4OFqyRcD-W6AADWdFIFAAA=",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"harshad.bhadane@neoquant.com",
+						"AAMkAGJiZmE1ZThiLWRjYmYtNGYzNi1hYjE3LTQxMGIzYmM0ZDExNgBGAAAAAAD4Z-hSDVayRbgQXxMjfeWLBwCtbdAsS5mJR4OFqyRcD-W6AAAAAAENAACtbdAsS5mJR4OFqyRcD-W6AADWdFIFAAA="
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
