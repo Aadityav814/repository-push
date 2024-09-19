@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "e082d0b7-3833-404c-9bd6-399967b2ca60",
+		"name": "Updated CSV TO JSON",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33736978",
+		"_collection_link": "https://lively-firefly-6887-1.postman.co/workspace/8c824f2c-7dc3-491f-8fb2-b8021f44f523/collection/33736978-e082d0b7-3833-404c-9bd6-399967b2ca60?action=share&source=collection_link&creator=33736978"
+	},
+	"item": [
+		{
+			"name": "localhost:5009/data/filterAllNew",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"fieldplacement\": \"Detailed Tile\",\r\n\"SK\": \"Credit Card Applicat\",\r\n\r\n\"channel\": \"NA\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5009/data/filterAllNew",
+					"host": [
+						"localhost"
+					],
+					"port": "5009",
+					"path": [
+						"data",
+						"filterAllNew"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:5009/convertall?fileName=Max19March.csv",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5009/convertall?fileName=Max19March.csv",
+					"host": [
+						"localhost"
+					],
+					"port": "5009",
+					"path": [
+						"convertall"
+					],
+					"query": [
+						{
+							"key": "fileName",
+							"value": "Max19March.csv"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
