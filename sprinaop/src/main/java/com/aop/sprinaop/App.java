@@ -3,6 +3,7 @@ package com.aop.sprinaop;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.aop.sprinaop.aspect.MyAspect;
 import com.aop.sprinaop.services.Payment;
 import com.aop.sprinaop.services.PaymentImpl;
 
@@ -32,6 +33,7 @@ public class App
         // Retrieve the 'payment' bean
         Payment paymentObj = context.getBean("payment",Payment.class);
         
+//        MyAspect myAspect=context.getBean("myaspect",MyAspect.class);
         
         paymentObj.makepayment();
     }

@@ -5,7 +5,7 @@ import org.aspectj.lang.annotation.Before;
 
 @Aspect
 public class MyAspect {
-	@Before(value = "")
+	@Before(value = "execution(* com.aop.sprinaop.services.PaymentImpl.makepayment())")
 	public void printbefore() {
 		
 		System.out.println("payment start");
