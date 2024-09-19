@@ -1,0 +1,242 @@
+PK,SK,INT,CHANNEL,TYPE,SEQ,SYS
+Eforms,byod#Account Opening Date,Account Opening Date,Branch,Title Tile,1,Eforms
+Eforms,byod#Account Scheme,Account Scheme,Branch,Detailed Tile,2,Eforms
+Eforms,byod#Application Pending With,Application Pending With,Branch,Title Tile,3,Eforms
+Eforms,byod#Bar Code,Bar Code,Branch,Title Tile,4,Eforms
+Eforms,byod#Current Status,Current Status,Branch,Title Tile,5,Eforms
+Eforms,byod#Customer Name,Customer Name,Branch,Detailed Tile,6,Eforms
+Eforms,byod#Discrepancy Date,Discrepancy Date,Branch,Detailed Tile,7,Eforms
+Eforms,byod#Discrepancy Sub reason,Discrepancy Sub reason,Branch,Detailed Tile,8,Eforms
+Eforms,byod#Discrepancy reason,Discrepancy reason,Branch,Detailed Tile,9,Eforms
+Eforms,byod#Insta Kit Account No,Insta Kit Account No,Branch,Detailed Tile,10,Eforms
+Eforms,byod#Insta Kit Cust ID,Insta Kit Cust ID,Branch,Detailed Tile,11,Eforms
+Eforms,byod#Mode of account opening,Mode of Account Opening,Branch,Title Tile,12,Eforms
+Eforms,byod#Opening Branch,Opening Branch,Branch,Detailed Tile,13,Eforms
+Eforms,byod#Rejection Comments,Rejection Comments,Branch,Detailed Tile,14,Eforms
+Eforms,byod#Resolution Comments,Resolution Comments,Branch,Detailed Tile,15,Eforms
+Eforms,byod#Resolution Date,Resolution Date,Branch,Detailed Tile,16,Eforms
+Eforms,byod#Source Branch,Source Branch,Branch,Detailed Tile,17,Eforms
+Eforms,byod#Status,Current Status,Branch,Title Tile,18,Eforms
+Eforms,paperbase#Account Opening Date,Account Opening Date,Branch,Title Tile,1,Eforms
+Eforms,paperbase#Account Scheme,Account Scheme,Branch,Detailed Tile,2,Eforms
+Eforms,paperbase#Application Pending With,Application Pending With,Branch,Title Tile,3,Eforms
+Eforms,paperbase#Bar Code,Bar Code,Branch,Title Tile,4,Eforms
+Eforms,paperbase#Current Status,Current Status,Branch,Title Tile,5,Eforms
+Eforms,paperbase#Customer Name,Customer Name,Branch,Detailed Tile,6,Eforms
+Eforms,paperbase#Discrepancy Date,Discrepancy Date,Branch,Detailed Tile,7,Eforms
+Eforms,paperbase#Discrepancy Sub reason,Discrepancy Sub reason,Branch,Detailed Tile,8,Eforms
+Eforms,paperbase#Discrepancy reason,Discrepancy reason,Branch,Detailed Tile,9,Eforms
+Eforms,paperbase#Insta Kit Account No,Insta Kit Account No.,Branch,Detailed Tile,10,Eforms
+Eforms,paperbase#Insta Kit Cust ID,Insta Kit Cust ID,Branch,Detailed Tile,11,Eforms
+Eforms,paperbase#Mode of account opening,Mode of Account Opening,Branch,Title Tile,12,Eforms
+Eforms,paperbase#Opening Branch,Opening Branch,Branch,Detailed Tile,13,Eforms
+Eforms,paperbase#Rejection Comments,Rejection Comments,Branch,Detailed Tile,14,Eforms
+Eforms,paperbase#Resolution Comments,Resolution Comments,Branch,Detailed Tile,15,Eforms
+Eforms,paperbase#Resolution Date,Resolution Date,Branch,Detailed Tile,16,Eforms
+Eforms,paperbase#Source Branch,Source Branch,Branch,Detailed Tile,17,Eforms
+Eforms,paperbase#Status,Status,Branch,Title Tile,18,Eforms
+Eforms,vcip#Account Scheme,Account Scheme,Digital - VCIP,Title Tile,1,Eforms
+Eforms,vcip#Bar Code,Bar Code,Digital - VCIP,Title Tile,2,Eforms
+Eforms,vcip#Customer Name,Customer Name,Digital - VCIP,Detailed Tile,3,Eforms
+Eforms,vcip#Discrepancy Date,Discrepancy Date,Digital - VCIP,Detailed Tile,4,Eforms
+Eforms,vcip#Discrepancy reason,Discrepancy Reason,Digital - VCIP,Detailed Tile,5,Eforms
+Eforms,vcip#Insta Kit Account No,Insta Kit Account No.,Digital - VCIP,Detailed Tile,6,Eforms
+Eforms,vcip#Insta Kit Cust ID,Insta Kit Cust ID,Digital - VCIP,Detailed Tile,7,Eforms
+Eforms,vcip#Mode of account opening,Mode of Account Opening,Digital - VCIP,Title Tile,8,Eforms
+Eforms,vcip#Opening Branch,Opening Branch,Digital - VCIP,Detailed Tile,9,Eforms
+Eforms,vcip#Rejection Comments,Rejection Comments,Digital - VCIP,Detailed Tile,10,Eforms
+Eforms,vcip#Resolution Comments,Resolution Comments,Digital - VCIP,Detailed Tile,11,Eforms
+Eforms,vcip#Resolution Date,Resolution Date,Digital - VCIP,Detailed Tile,12,Eforms
+Eforms,vcip#Source Branch,Source Branch,Digital - VCIP,Detailed Tile,13,Eforms
+Eforms,vcip#Status,Status,Digital - VCIP,Title Tile,14,Eforms
+Maximus,Credit Card Application#Annual Fee,Annual Fee,NA,Detailed Tile,1,Maximus
+Maximus,Credit Card Application#Applicant Name,Applicant Name,NA,Title Tile,2,Maximus
+Maximus,Credit Card Application#Application Channel,Application Channel,NA,Title Tile,3,Maximus
+Maximus,Credit Card Application#Application Declined Date,Application Declined Date,NA,Detailed Tile,4,Maximus
+Maximus,Credit Card Application#Application Declined Reason,Application Declined Reason,NA,Detailed Tile,5,Maximus
+Maximus,Credit Card Application#Application No.,Application No.,NA,Title Tile,6,Maximus
+Maximus,Credit Card Application#Application Status,Application Status,NA,Title Tile,7,Maximus
+Maximus,Credit Card Application#Application no.,Application no.,NA,Title Tile,8,Maximus
+Maximus,Credit Card Application#Card Name,Card Name,NA,Title Tile,9,Maximus
+Maximus,Credit Card Application#Credit Card Limit,Credit Card Limit,NA,Detailed Tile,10,Maximus
+Maximus,Credit Card Application#Credit Card Number,Credit Card No.,NA,Detailed Tile,11,Maximus
+Maximus,Credit Card Application#Email ID,Email ID,NA,Detailed Tile,12,Maximus
+Maximus,Credit Card Application#Email Id,Email ID,NA,Detailed Tile,13,Maximus
+Maximus,Credit Card Application#Initial Application Source,Initial Application Source,NA,Detailed Tile,14,Maximus
+Maximus,Credit Card Application#Joining Fee,Joining Fee,NA,Detailed Tile,15,Maximus
+Maximus,Credit Card Application#Journey Type,Journey Type,NA,Title Tile,16,Maximus
+Maximus,Credit Card Application#Latest Application Source,Latest Application Source,NA,Detailed Tile,17,Maximus
+Maximus,Credit Card Application#Mobile,Mobile,NA,Detailed Tile,18,Maximus
+Maximus,Credit Card Application#Newgen Reference ID,Newgen Reference ID,NA,Detailed Tile,19,Maximus
+Avaya,Incoming call from customer#Call Duration,Call Duration,NA,Title Tile,1,Avaya
+Avaya,Incoming call from customer#Call Status,Last Service Availed Status,NA,Title Tile,2,Avaya
+Avaya,Incoming call from customer#Customer Type,Call Authenticated through Registered Mobile No.,NA,Detailed Tile,3,Avaya
+Avaya,Incoming call from customer#End Time,Call End Time,NA,NA,4,Avaya
+Avaya,Incoming call from customer#IVR Call ID,IVR Call ID,NA,Detailed Tile,5,Avaya
+Avaya,Incoming call from customer#Language,Language Selected,NA,Detailed Tile,6,Avaya
+Avaya,Incoming call from customer#Last Accessed Menu,Last Accessed Menu,NA,Title Tile,7,Avaya
+Avaya,Incoming call from customer#Last Accessed Service,Last Accessed Service,NA,Title Tile,8,Avaya
+Avaya,Incoming call from customer#Last Service Availed,Last Service Availed,NA,Title Tile,9,Avaya
+Avaya,Incoming call from customer#Mobile No.,Customer Mobile No.,NA,Title Tile,10,Avaya
+Avaya,Incoming call from customer#Service Check,Service Check,NA,NA,11,Avaya
+Avaya,Incoming call from customer#Start Time,Call Start Time,NA,Title Tile,12,Avaya
+Axiom,Email Communications#Communication System,Communication System,NA,Detailed Tile,1,Axiom
+Axiom,Email Communications#Delivery Date and Time,Delivery Date and Time,NA,Title Tile,2,Axiom
+Axiom,Email Communications#Delivery Status,Delivery Status,NA,Title Tile,3,Axiom
+Axiom,Email Communications#Email Content,Email Content,NA,Detailed Tile,4,Axiom
+Axiom,Email Communications#Email ID,Recipient E-mail ID,NA,Title Tile,5,Axiom
+Axiom,Email Communications#Email Subject,Email Subject,NA,Detailed Tile,6,Axiom
+Axiom,Email Communications#Mobile Number,Recipient Mobile Number,NA,Title Tile,7,Axiom
+Axiom,Email Communications#Product,Product,NA,Detailed Tile,8,Axiom
+Axiom,Email Communications#Sender ID,Sender ID,NA,Detailed Tile,9,Axiom
+Axiom,Email Communications#Sent Date and Time,Sent Date and Time,NA,Title Tile,10,Axiom
+Axiom,SMS Communications#Communication System,Communication System,NA,Detailed Tile,11,Axiom
+Axiom,SMS Communications#DND Flag,DND Flag,NA,Detailed Tile,12,Axiom
+Axiom,SMS Communications#Delivery Date and Time,Delivery Date and Time,NA,Title Tile,13,Axiom
+Axiom,SMS Communications#Delivery Status,Delivery Status,NA,Title Tile,14,Axiom
+Axiom,SMS Communications#Email ID,Recipient E-mail ID,NA,Title Tile,15,Axiom
+Axiom,SMS Communications#Mobile Number,Recipient Mobile Number,NA,Title Tile,16,Axiom
+Axiom,SMS Communications#Product,Product,NA,Detailed Tile,17,Axiom
+Axiom,SMS Communications#SMS Content,SMS Content,NA,Detailed Tile,18,Axiom
+Axiom,SMS Communications#Sender ID,Sender ID,NA,Detailed Tile,19,Axiom
+Axiom,SMS Communications#Sent Date and Time,Sent Date and Time,NA,Title Tile,20,Axiom
+Axiom,SMS Communications#Type of SMS,Type of SMS,NA,Detailed Tile,21,Axiom
+Base24,ATM - Instant Services#ATM Location,ATM Name & Location,NA,Detailed Tile,1,Base24
+Base24,ATM - Instant Services#Account Number,Account Number,NA,Detailed Tile,2,Base24
+Base24,ATM - Instant Services#Amount of transaction,Amount of transaction,NA,Title Tile,3,Base24
+Base24,ATM - Instant Services#Card Number,Card Number,NA,Detailed Tile,4,Base24
+Base24,ATM - Instant Services#Failure Reason,Failure Reason,NA,Title Tile,5,Base24
+Base24,ATM - Instant Services#Service Availed,Service Availed,NA,Detailed Tile,6,Base24
+Base24,ATM - Instant Services#Status,Status,NA,Title Tile,7,Base24
+Base24,Transaction at POS#Account Number,Account Number,NA,Detailed Tile,8,Base24
+Base24,Transaction at POS#Amount of transaction,Amount of transaction,NA,Title Tile,9,Base24
+Base24,Transaction at POS#Card Number,Card Number,NA,Detailed Tile,10,Base24
+Base24,Transaction at POS#Failure Reason,Failure Reason,NA,Title Tile,11,Base24
+Base24,Transaction at POS#POS Location,Merchant Name & Location,NA,Detailed Tile,12,Base24
+Base24,Transaction at POS#Service Availed,Service Availed,NA,Detailed Tile,13,Base24
+Base24,Transaction at POS#Status,Status,NA,Title Tile,14,Base24
+Chub,Email sent to customer#Communication System,Communication System,NA,Detailed Tile,1,Chub
+Chub,Email sent to customer#Communication Type,Product,NA,Detailed Tile,2,Chub
+Chub,Email sent to customer#Delivery date and time,Delivery Date and Time,NA,Title Tile,3,Chub
+Chub,Email sent to customer#Email Content,Email Content,NA,Detailed Tile,4,Chub
+Chub,Email sent to customer#Email Subject,Email Subject,NA,Detailed Tile,5,Chub
+Chub,Email sent to customer#Recepient E-mail ID,Recepient E-mail ID,NA,Title Tile,6,Chub
+Chub,Email sent to customer#Sender ID,Sender ID,NA,Detailed Tile,7,Chub
+Chub,Email sent to customer#Sent date and time,Sent Date and Time,NA,Title Tile,8,Chub
+Chub,Email sent to customer#Status,Delivery Status,NA,Title Tile,9,Chub
+Chub,SMS sent to customer#Communication System,Communication System,NA,Detailed Tile,10,Chub
+Chub,SMS sent to customer#Communication Type,Product,NA,Detailed Tile,11,Chub
+Chub,SMS sent to customer#Delivery date and time,Delivery Date and Time,NA,Title Tile,12,Chub
+Chub,SMS sent to customer#Recepient Mobil Number,Recipient Mobile Number,NA,Title Tile,13,Chub
+Chub,SMS sent to customer#SMS Content,SMS Content,NA,Detailed Tile,14,Chub
+Chub,SMS sent to customer#Sender ID,Sender ID,NA,Detailed Tile,15,Chub
+Chub,SMS sent to customer#Sent date and time,Sent Date and Time,NA,Title Tile,16,Chub
+Chub,SMS sent to customer#Status,Delivery Status,NA,Title Tile,17,Chub
+Chub,SMS sent to customer#Type of SMS,Type of SMS,NA,Detailed Tile,18,Chub
+CMS,NSR#Discrepancy Date,Discrepancy Date,NA,Detailed Tile,1,CMS
+CMS,NSR#Discrepancy Resolution Date,Discrepancy Resolution Date,NA,Detailed Tile,2,CMS
+CMS,NSR#Discrepancy Resolution remarks,Discrepancy Resolution remarks,NA,Detailed Tile,3,CMS
+CMS,NSR#Expected resolution date,Expected resolution date,NA,Title Tile,4,CMS
+CMS,NSR#Initiation Channel - Medium,Channel/Medium of Request,NA,Detailed Tile,5,CMS
+CMS,NSR#Loan Account Number,Loan Account Number,NA,Detailed Tile,6,CMS
+CMS,NSR#Loan Type,Loan Type,NA,Detailed Tile,7,CMS
+CMS,NSR#Nature Of Query,Nature Of Query,NA,Detailed Tile,8,CMS
+CMS,NSR#Product,Product,NA,Title Tile,9,CMS
+CMS,NSR#Rejection Reason,Rejection Reason,NA,Detailed Tile,10,CMS
+CMS,NSR#Remarks,Remarks,NA,Detailed Tile,11,CMS
+CMS,NSR#SR Closed date,SR Closed date,NA,Title Tile,12,CMS
+CMS,NSR#SR No,SR No,NA,Title Tile,13,CMS
+CMS,NSR#SR Status,SR Status,NA,Title Tile,14,CMS
+CMS,NSR#SR Sub-Type,SR Sub-Type,NA,Title Tile,15,CMS
+CMS,NSR#SR Type,SR Type,NA,Detailed Tile,16,CMS
+CMS,SR#Discrepancy Date,Discrepancy Date,NA,Detailed Tile,1,CMS
+CMS,SR#Discrepancy Resolution Date,Discrepancy Resolution Date,NA,Detailed Tile,2,CMS
+CMS,SR#Discrepancy Resolution remarks,Discrepancy Resolution remarks,NA,Detailed Tile,3,CMS
+CMS,SR#Expected resolution date,Expected resolution date,NA,Title Tile,4,CMS
+CMS,SR#Initiation Channel - Medium,Channel/Medium of Request,NA,Detailed Tile,5,CMS
+CMS,SR#Loan Account Number,Loan Account Number,NA,Detailed Tile,6,CMS
+CMS,SR#Loan Type,Loan Type,NA,Detailed Tile,7,CMS
+CMS,SR#Nature Of Query,Nature Of Query,NA,Detailed Tile,8,CMS
+CMS,SR#Product,Product,NA,Title Tile,9,CMS
+CMS,SR#Rejection Reason,Rejection Reason,NA,Detailed Tile,10,CMS
+CMS,SR#Remarks,Remarks,NA,Detailed Tile,11,CMS
+CMS,SR#SR Closed date,SR Closed date,NA,Title Tile,12,CMS
+CMS,SR#SR No,SR No,NA,Title Tile,13,CMS
+CMS,SR#SR Status,SR Status,NA,Title Tile,14,CMS
+CMS,SR#SR Sub-Type,SR Sub-Type,NA,Title Tile,15,CMS
+CMS,SR#SR Type,SR Type,NA,Detailed Tile,16,CMS
+CRM,NSR#Account Number,Account Number,CRM,Detailed Tile,1,CRM
+CRM,NSR#Account Scheme,Account Scheme,CRM,Detailed Tile,2,CRM
+CRM,NSR#Card Number,Card Number,CRM,Detailed Tile,3,CRM
+CRM,NSR#Card Type,Card Type,CRM,Detailed Tile,4,CRM
+CRM,NSR#Expected resolution date,Expected resolution date,CRM,Title Tile,5,CRM
+CRM,NSR#Interaction Type,Channel of Request,CRM,Detailed Tile,6,CRM
+CRM,NSR#NFTR/STO Reason,NFTR/STO Reason,CRM,Detailed Tile,7,CRM
+CRM,NSR#Nature Of Query,Nature of Query,CRM,Detailed Tile,8,CRM
+CRM,NSR#Product,Product,CRM,Title Tile,9,CRM
+CRM,NSR#Remarks,Remarks,CRM,Detailed Tile,10,CRM
+CRM,NSR#SR Closed date,SR Closed date,CRM,Title Tile,11,CRM
+CRM,NSR#SR No,SR No.,CRM,Title Tile,12,CRM
+CRM,NSR#SR Status,SR Status,CRM,Title Tile,13,CRM
+CRM,NSR#SR Sub Sub-Type,Customer Request Type,CRM,Title Tile,14,CRM
+CRM,NSR#SR Sub-Type,SR Sub-Type,CRM,Detailed Tile,15,CRM
+CRM,NSR#SR Type,SR Type,CRM,Detailed Tile,16,CRM
+CRM,SR#Account Number,Account Number,CRM,Detailed Tile,1,CRM
+CRM,SR#Account Scheme,Account Scheme,CRM,Detailed Tile,2,CRM
+CRM,SR#Card Number,Card Number,CRM,Detailed Tile,3,CRM
+CRM,SR#Card Type,Card Type,CRM,Detailed Tile,4,CRM
+CRM,SR#Expected resolution date,Expected resolution date,CRM,Title Tile,5,CRM
+CRM,SR#Interaction Type,Channel of Request,CRM,Detailed Tile,6,CRM
+CRM,SR#NFTR/STO Reason,NFTR/STO Reason,CRM,Detailed Tile,7,CRM
+CRM,SR#Nature Of Query,Nature of Query,CRM,Detailed Tile,8,CRM
+CRM,SR#Product,Product,CRM,Title Tile,9,CRM
+CRM,SR#Remarks,Remarks,CRM,Detailed Tile,10,CRM
+CRM,SR#SR Closed date,SR Closed date,CRM,Title Tile,11,CRM
+CRM,SR#SR No,SR No.,CRM,Title Tile,12,CRM
+CRM,SR#SR Status,SR Status,CRM,Title Tile,13,CRM
+CRM,SR#SR Sub Sub-Type,Customer Request Type,CRM,Title Tile,14,CRM
+CRM,SR#SR Sub-Type,SR Sub-Type,CRM,Detailed Tile,15,CRM
+CRM,SR#SR Type,SR Type,CRM,Detailed Tile,16,CRM
+DLMS,Deliverables Tracking#AWB No,AWB No.,DLMS,Title Tile,1,DLMS
+DLMS,Deliverables Tracking#Courier Name,Courier Name,DLMS,Title Tile,2,DLMS
+DLMS,Deliverables Tracking#Current Status,Current Status,DLMS,Title Tile,3,DLMS
+DLMS,Deliverables Tracking#Delivery Address,Delivery Address,DLMS,Detailed Tile,4,DLMS
+DLMS,Deliverables Tracking#Delivery Country,Delivery Country,DLMS,Detailed Tile,5,DLMS
+DLMS,Deliverables Tracking#Delivery Pin Code,Delivery Pin Code,DLMS,Detailed Tile,6,DLMS
+DLMS,Deliverables Tracking#Delivery date,Delivery Date,DLMS,Detailed Tile,7,DLMS
+DLMS,Deliverables Tracking#Dispatch Date,Dispatch Date,DLMS,Title Tile,8,DLMS
+DLMS,Deliverables Tracking#Document handed over to,Document handed over to,DLMS,Detailed Tile,9,DLMS
+DLMS,Deliverables Tracking#Last delivery attempt date,Last delivery attempt date,DLMS,Detailed Tile,10,DLMS
+DLMS,Deliverables Tracking#Product,Product,DLMS,Title Tile,11,DLMS
+DLMS,Deliverables Tracking#Reason for non-delivery,Reason for non-delivery,DLMS,Detailed Tile,12,DLMS
+DLMS,Deliverables Tracking#Remarks,Remarks,DLMS,Detailed Tile,13,DLMS
+DLMS,Deliverables Tracking#Sub-product,Sub-product,DLMS,Detailed Tile,14,DLMS
+IB,Internet Banking - Instant Services#Account Number,Account Number,Internet Banking,Title Tile,1,IB
+IB,Internet Banking - Instant Services#Date of service,Date of Service,Internet Banking,Title Tile,2,IB
+IB,Internet Banking - Instant Services#Services Availed,Services Availed,Internet Banking,Title Tile,3,IB
+IB,Internet Banking Login Failure#Error Description,Error Description,Internet Banking,Title Tile,4,IB
+IB,Internet Banking Login Failure#Login Credential combination,Login Credential combination,Internet Banking,Title Tile,5,IB
+IB,Internet Banking Login Failure#Login ID,Login ID,Internet Banking,Title Tile,6,IB
+IB,Internet Banking Login Failure#Login Status,Login Status,Internet Banking,Title Tile,7,IB
+IB,Internet Banking Login#Error Description,Error Description,Internet Banking,Title Tile,8,IB
+IB,Internet Banking Login#Login Credential combination,Login Credential combination,Internet Banking,Title Tile,9,IB
+IB,Internet Banking Login#Login ID,Login ID,Internet Banking,Title Tile,10,IB
+IB,Internet Banking Login#Login Status,Login Status,Internet Banking,Title Tile,11,IB
+MB,MB Registration Status#App Status,App Status,Mobile Banking,Title Tile,1,MB
+MB,MB Registration Status#MB Registration Status,Registration Status,Mobile Banking,Title Tile,2,MB
+MB,MB Registration Status#Registration Failure Reason,Registration Failure Reason,Mobile Banking,Title Tile,3,MB
+MB,Mobile Banking - Debit Card PIN Set Up#Date of Service,Date of Service,Mobile Banking,Title Tile,4,MB
+MB,Mobile Banking - Debit Card PIN Set Up#Date of service,Date of Service,Mobile Banking,Title Tile,5,MB
+MB,Mobile Banking - Debit Card PIN Set Up#Debit Card No,Debit Card No.,Mobile Banking,Title Tile,6,MB
+MB,Mobile Banking - Debit Card PIN Set Up#Failure Reason,Failure Reason,Mobile Banking,Title Tile,7,MB
+MB,Mobile Banking - Debit Card PIN Set Up#Services Availed,Services Availed,Mobile Banking,Title Tile,8,MB
+MB,Mobile Banking - Debit Card PIN Set Up#Status,Status,Mobile Banking,Title Tile,9,MB
+MB,Mobile Banking Device Change#App Status,App Status,NA,Title Tile,10,MB
+MB,Mobile Banking Device Change#First Registration Date,First Registration Date,NA,Title Tile,11,MB
+MB,Mobile Banking Device Change#New Device Registration Date,New Device Registration Date,NA,Title Tile,12,MB
+MB,Mobile Banking Login Failure#Incorrect MPIN attempts,Incorrect MPIN attempts,Mobile Banking,Title Tile,13,MB
+MB,Mobile Banking Login Failure#MPIN Expiry Status,MPIN Expiry Status,Mobile Banking,Title Tile,14,MB
+MB,Mobile Banking Login Failure#MPIN Locked Status,MPIN Locked Status,Mobile Banking,Title Tile,15,MB
+MB,Mobile Banking Login#Incorrect MPIN attempts,Incorrect MPIN attempts,Mobile Banking,Title Tile,16,MB
+MB,Mobile Banking Login#MPIN Expiry Status,MPIN Expiry Status,Mobile Banking,Title Tile,17,MB
+MB,Mobile Banking Login#MPIN Locked Status,MPIN Locked Status,Mobile Banking,Title Tile,18,MB

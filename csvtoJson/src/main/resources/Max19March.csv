@@ -1,0 +1,13 @@
+PK,SK,fdval,channel,fieldplacement,sequence,systemname
+Maximus,Credit Card Application#Email ID,Email ID,NA,Detailed Tile,1,Maximus
+Maximus,Credit Card Application#Email Id,Email ID,NA,Detailed Tile,2,Maximus
+Maximus,Credit Card Application#Mobile,Mobile No.,NA,Detailed Tile,3,Maximus
+Maximus,Credit Card Application#Initial Application Source,Initial Application Source,NA,Detailed Tile,4,Maximus
+Maximus,Credit Card Application#Latest Application Source,Latest Application Source,NA,Detailed Tile,5,Maximus
+Maximus,Credit Card Application#Joining Fee,Joining Fee,NA,Detailed Tile,6,Maximus
+Maximus,Credit Card Application#Annual Fee,Annual Fee,NA,Detailed Tile,7,Maximus
+Maximus,Credit Card Application#Application Declined Reason,Application Declined Reason,NA,Detailed Tile,8,Maximus
+Maximus,Credit Card Application#Application Declined Date,Application Declined Date,NA,Detailed Tile,9,Maximus
+Maximus,Credit Card Application#Credit Card Number,Credit Card No.,NA,Detailed Tile,10,Maximus
+Maximus,Credit Card Application#Credit Card Limit,Credit Card Limit,NA,Detailed Tile,11,Maximus
+Maximus,Credit Card Application#Newgen Reference ID,Newgen Reference ID,NA,Detailed Tile,12,Maximus
