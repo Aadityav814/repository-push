@@ -1,0 +1,481 @@
+package com.excel.demoproject.repository;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+
+import com.excel.demoproject.dto.MasterResdto;
+import com.excel.demoproject.entity.EmpDetails;
+import com.excel.demoproject.entity.Employee;
+
+import io.micrometer.common.util.StringUtils;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.BatchWriteItemEnhancedRequest;
+import software.amazon.awssdk.enhanced.dynamodb.model.WriteBatch;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+
+@Repository
+public class EmployeeRepository {
+
+	@Autowired
+	private DynamoDBMapper dynamoDBMapper;
+	private MasterRepo ex;
+
+	private static final String EXCEL_EXTENSION = ".xlsx";
+
+	public Employee save(Employee employee) {
+		dynamoDBMapper.save(employee);
+		return employee;
+	}
+
+	public Employee getEmployeeById(String employeeId) {
+		return dynamoDBMapper.load(Employee.class, employeeId);
+	}
+
+	public String delete(String employeeId) {
+		Employee emp = dynamoDBMapper.load(Employee.class, employeeId);
+		dynamoDBMapper.delete(emp);
+		return "Employee Deleted!";
+	}
+
+	public String update(String employeeId, Employee employee) {
+		dynamoDBMapper.save(employee, new DynamoDBSaveExpression().withExpectedEntry("employeeId",
+				new ExpectedAttributeValue(new AttributeValue().withS(employeeId))));
+		return employeeId;
+	}
+
+	public boolean isValidExcelFile(MultipartFile file) {
+		// TODO Auto-generated method stub
+		String originalFilename = file.getOriginalFilename();
+
+		return (originalFilename != null && originalFilename.toLowerCase().endsWith(EXCEL_EXTENSION));
+	}
+
+//	public void saveToDynamoDB(List<Employee> list) {
+//		// TODO Auto-generated method stub
+//		EnhancedDynamoDbTable<Employee> table = enhancedClient.table("employee", Employee.class);
+//
+//        WriteBatch.Builder<Employee> writeBatchBuilder = WriteBatch.builder(Employee.class);
+//        list.forEach(writeBatchBuilder::addPutItem);
+//
+//        table.writeBatches().executeWriteBatch(writeBatchBuilder.build());
+//    }
+//		
+//	}
+
+	public ResponseEntity<MasterResdto> readExcel(MultipartFile file) {
+		// TODO Auto-generated method stub
+
+		if (file == null || file.isEmpty()) {
+			MasterResdto res = new MasterResdto();
+			res.setMessage("File is null or empty");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+		}
+
+		List<Employee> list = new ArrayList<>();
+		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+			Sheet sheet = workbook.getSheetAt(0);
+			int rowNumber = 0;
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				Boolean isRowEmpty = checkIfRowIsEmpty(row);
+
+				if (isRowEmpty) {
+					MasterResdto res = new MasterResdto();
+					res.setMessage("Data not found");
+					return ResponseEntity.status(HttpStatus.OK).body(res);
+				}
+
+				if (rowNumber == 0) {
+					rowNumber++;
+					continue;
+				}
+
+				Iterator<Cell> cellIterator = row.cellIterator();
+				Employee dto = new Employee();
+
+				if (cellIterator.hasNext()) {
+					dto.setFirstName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setLastName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setEmail(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setDate(cellIterator.next().toString());
+				}
+				list.add(dto);
+				
+				
+
+				dynamoDBMapper.save(dto);
+			}
+
+			MasterResdto res = new MasterResdto();
+			res.setResult(true);
+			res.setMessage("File uploaded successfully");
+			res.setStatuscode(200);
+			res.setList(list);
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(res);
+		} catch (IOException e) {
+			// Handle the exception
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+
+	private boolean checkIfRowIsEmpty(Row row) {
+		if (row == null) {
+			return true;
+		}
+		if (row.getLastCellNum() <= 0) {
+			return true;
+		}
+		for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+			Cell cell = row.getCell(cellNum);
+			if (cell != null && cell.getCellType() != CellType.BLANK && StringUtils.isNotBlank(cell.toString())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public Employee getEmployeeByfname(String firstName) {
+
+		// TODO Auto-generated method stub
+		return dynamoDBMapper.load(Employee.class, firstName);
+
+	}
+
+	public List<Employee> getEmployeesByFname(String firstName) {
+
+		// TODO Auto-generated method stub
+		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression().withFilterExpression("firstName = :val1")
+				.withExpressionAttributeValues(
+						Collections.singletonMap(":val1", new AttributeValue().withS(firstName)));
+
+		return dynamoDBMapper.scan(Employee.class, scanExpression);
+	}
+
+	public List<Employee> getEmployeesByInputKey(String inputKey) {
+		// TODO Auto-generated method stub
+		try {
+			Map<String, AttributeValue> attributeValues = new HashMap<>();
+			attributeValues.put(":val1", new AttributeValue().withS(inputKey));
+
+			DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+					.withKeyConditionExpression("inputKey = :val1").withExpressionAttributeValues(attributeValues);
+
+			return dynamoDBMapper.query(Employee.class, queryExpression);
+
+		} catch (Exception e) {
+			// Handle exceptions appropriately (log, throw, etc.)
+			e.printStackTrace(); // Example: print the stack trace for simplicity
+			return Collections.emptyList(); // Return an empty list or handle error response
+		}
+	}
+
+//	 public List<Employee> getEmployeesByAttributes(String firstName, String lastName, String email) {
+//		 try {
+//	            DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+//	            Map<String, AttributeValue> attributeValues = new HashMap<>();
+//
+//	            if (firstName != null) {
+//	                scanExpression.withFilterExpression("firstName = :val1");
+//	                attributeValues.put(":val1", new AttributeValue().withS(firstName));
+//	            }
+//
+//	            if (lastName != null) {
+//	                scanExpression.withFilterExpression("lastName = :val2");
+//	                attributeValues.put(":val2", new AttributeValue().withS(lastName));
+//	            }
+//
+//	            if (email != null) {
+//	                scanExpression.withFilterExpression("email = :val3");
+//	                attributeValues.put(":val3", new AttributeValue().withS(email));
+//	            }
+//
+//	            if (!attributeValues.isEmpty()) {
+//	                scanExpression.withExpressionAttributeValues(attributeValues);
+//	            }
+//
+//	            return dynamoDBMapper.scan(Employee.class, scanExpression);
+//
+//	        } catch (Exception e) {
+//	            // Handle exceptions appropriately (log, throw, etc.)
+//	            e.printStackTrace(); // Example: print the stack trace for simplicity
+//	            return Collections.emptyList(); // Return an empty list or handle error response
+//	        }
+//	    }
+
+	public List<Employee> searchEmployees(String searchValue) {
+		// TODO Auto-generated method stub
+		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+		scanExpression.withFilterExpression("firstName = :val OR lastName = :val OR email = :val OR #date = :val")
+				.withExpressionAttributeNames(Collections.singletonMap("#date", "date")).withExpressionAttributeValues(
+						Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+
+		return dynamoDBMapper.scan(Employee.class, scanExpression);
+	}
+
+	public ResponseEntity<MasterResdto> readExce(MultipartFile file) {
+		// TODO Auto-generated method stub
+
+		if (file == null || file.isEmpty()) {
+			MasterResdto res = new MasterResdto();
+			res.setMessage("File is null or empty");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+		}
+
+		List<EmpDetails> list = new ArrayList<>();
+		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+			Sheet sheet = workbook.getSheetAt(0);
+			int rowNumber = 0;
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				Boolean isRowEmpty = checkIfRowIsEmpty(row);
+
+				if (isRowEmpty) {
+					MasterResdto res = new MasterResdto();
+					res.setMessage("Data not found");
+					return ResponseEntity.status(HttpStatus.OK).body(res);
+				}
+
+				if (rowNumber == 0) {
+					rowNumber++;
+					continue;
+				}
+
+				Iterator<Cell> cellIterator = row.cellIterator();
+				EmpDetails dto = new EmpDetails();
+
+				if (cellIterator.hasNext()) {
+					dto.setFirstName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setLastName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setEmail(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setDate(cellIterator.next().toString());
+				}
+				list.add(dto);
+
+			}
+			ex.saveAll(list);
+
+			MasterResdto res = new MasterResdto();
+			res.setResult(true);
+			res.setMessage("File uploaded successfully");
+			res.setStatuscode(200);
+			res.setLis(list);
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(res);
+		} catch (IOException e) {
+			// Handle the exception
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+
+	public List<Employee> saverecord(List<EmpDetails> emp) {
+		// TODO Auto-generated method stub
+
+		List<Employee> dynamoDBEmployees = emp.stream().map(this::convertToEmployee).collect(Collectors.toList());
+		dynamoDBMapper.batchSave(dynamoDBEmployees);
+
+		return dynamoDBEmployees;
+
+	}
+
+	private Employee convertToEmployee(EmpDetails employee) {
+		Employee dynamoDBEmployee = new Employee();
+		dynamoDBEmployee.setFirstName(employee.getFirstName());
+		dynamoDBEmployee.setLastName(employee.getLastName());
+		dynamoDBEmployee.setEmail(employee.getEmail());
+		dynamoDBEmployee.setDate(employee.getDate());
+		// Set other attributes if needed
+		return dynamoDBEmployee;
+	}
+
+	public List<Employee> searchEmployee(String attributeName,String searchValue) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		Map<String, AttributeValue> eav = new HashMap<>();
+        eav.put(":val1", new AttributeValue().withS(searchValue));
+
+        String keyConditionExpression = getKeyConditionExpression(attributeName);
+
+        DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+                .withIndexName(getIndexName(attributeName))
+                .withConsistentRead(false)
+                .withKeyConditionExpression(keyConditionExpression)
+                .withExpressionAttributeValues(eav);
+        if (attributeName.equalsIgnoreCase("date")) {
+            queryExpression = queryExpression.withExpressionAttributeNames(
+                Collections.singletonMap("#dt", "date")
+            );}
+
+        return dynamoDBMapper.query(Employee.class, queryExpression);
+		
+		
+		
+		
+		
+
+//		DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//				.withIndexName("LastNameIndex") // Assuming you have an index on the firstName attribute
+//				.withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//				.withKeyConditionExpression("lastName = :val").withExpressionAttributeValues(
+//						Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//		return dynamoDBMapper.query(Employee.class, queryExpression);
+
+//		  DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//	                .withIndexName("FirstNameIndex") // Assuming you have an index on the firstName attribute
+//	                .withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//	                .withKeyConditionExpression("firstName = :val OR lastName = :val OR email = :val OR #date = :val")
+//	                .withFilterExpression("lastName = :val OR email = :val OR #date = :val")
+//	                .withExpressionAttributeNames(Collections.singletonMap("#date", "date"))
+//	                .withExpressionAttributeValues(Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//	        return dynamoDBMapper.query(Employee.class, queryExpression);
+//	    
+
+	}
+
+	private String getIndexName(String attributeName) {
+		// TODO Auto-generated method stub
+		 switch (attributeName.toLowerCase()) {
+         case "firstname":
+             return "FirstNameIndex";
+         case "lastname":
+             return "LastNameIndex";
+         case "email":
+             return "EmailIndex";
+         case "date":
+             return "DateIndex"; // Assuming you have an index for date
+         default:
+             throw new IllegalArgumentException("Invalid attribute name provided");
+     }
+	}
+
+	private String getKeyConditionExpression(String attributeName) {
+		// TODO Auto-generated method stub
+		 switch (attributeName.toLowerCase()) {
+         case "firstname":
+             return "firstName = :val1";
+         case "lastname":
+             return "lastName = :val1";
+         case "email":
+             return "email = :val1";
+         case "date":
+        	 return "#dt = :val1"; // Adjust this condition based on your actual attribute name
+         default:
+             throw new IllegalArgumentException("Invalid attribute name provided");
+     }
+	}
+
+	public Employee saverecords(EmpDetails emp) {
+		// TODO Auto-generated method stub
+		Employee dynamoDBEmployees = new Employee();
+		dynamoDBEmployees.setFirstName(emp.getFirstName());
+		dynamoDBEmployees.setLastName(emp.getLastName());
+		dynamoDBEmployees.setEmail(emp.getEmail());
+		dynamoDBEmployees.setDate(emp.getDate());
+		
+		dynamoDBMapper.save(dynamoDBEmployees);
+
+		return dynamoDBEmployees;
+	}
+
+	public List<Employee> searchEmployeed(String searchValue) {
+		// TODO Auto-generated method stub
+		 Map<String, AttributeValue> eav = new HashMap<>();
+		    eav.put(":val", new AttributeValue().withS(searchValue));
+
+		    // Create the query expression
+		    DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+		            .withKeyConditionExpression("firstName = :val OR lastName = :val OR email = :val OR date = :val")
+		            .withExpressionAttributeValues(eav);
+
+		    // Execute the query
+		    return dynamoDBMapper.query(Employee.class, queryExpression);
+        
+        
+        
+//      if (attributeName.equalsIgnoreCase("date")) {
+//      queryExpression = queryExpression.withExpressionAttributeNames(
+//          Collections.singletonMap("#dt", "date")
+//      );}
+	}
+
+//	private List<Employee> second(String searchValue) {
+//		// TODO Auto-generated method stub
+//		
+//		List<Employee> emp=firstName(searchValue);
+//		
+//		if(emp==null) {
+//			
+//			return null;
+//			
+//			
+//		}else {
+//			DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//					.withIndexName("LastNameIndex") // Assuming you have an index on the firstName attribute
+//					.withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//					.withKeyConditionExpression("lastName = :val").withExpressionAttributeValues(
+//							Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//			return dynamoDBMapper.query(Employee.class, queryExpression);
+//		}
+//		
+//	}
+//
+//	private List<Employee> firstName(String searchValue) {
+//		// TODO Auto-generated method stub
+//		DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//				.withIndexName("FirstNameIndex") // Assuming you have an index on the firstName attribute
+//				.withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//				.withKeyConditionExpression("firstName = :val").withExpressionAttributeValues(
+//						Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//		return dynamoDBMapper.query(Employee.class, queryExpression);
+//	}
+}

@@ -1,0 +1,78 @@
+2024-01-09T11:16:39.660+05:30  INFO 22100 --- [main] c.cross.cross_sell.CrossSellApplication  : Starting CrossSellApplication using Java 17.0.7 with PID 22100 (C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell\target\classes started by aadit in C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell)
+2024-01-09T11:16:39.662+05:30  INFO 22100 --- [main] c.cross.cross_sell.CrossSellApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-01-09T11:16:40.648+05:30  INFO 22100 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9092 (http)
+2024-01-09T11:16:40.665+05:30  INFO 22100 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-09T11:16:40.666+05:30  INFO 22100 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-01-09T11:16:40.757+05:30  INFO 22100 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-09T11:16:40.757+05:30  INFO 22100 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1023 ms
+2024-01-09T11:16:41.204+05:30  INFO 22100 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9092 (http) with context path ''
+2024-01-09T11:16:41.217+05:30  INFO 22100 --- [main] c.cross.cross_sell.CrossSellApplication  : Started CrossSellApplication in 2.026 seconds (process running for 2.808)
+2024-01-09T11:16:49.531+05:30  INFO 22100 --- [http-nio-9092-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-01-09T11:16:49.531+05:30  INFO 22100 --- [http-nio-9092-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-01-09T11:16:49.532+05:30  INFO 22100 --- [http-nio-9092-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-01-09T11:17:23.199+05:30  INFO 22100 --- [RMI TCP Connection(4)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-01-09T11:17:34.846+05:30  INFO 27432 --- [main] c.cross.cross_sell.CrossSellApplication  : Starting CrossSellApplication using Java 17.0.7 with PID 27432 (C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell\target\classes started by aadit in C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell)
+2024-01-09T11:17:34.849+05:30  INFO 27432 --- [main] c.cross.cross_sell.CrossSellApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-01-09T11:17:35.925+05:30  INFO 27432 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9092 (http)
+2024-01-09T11:17:35.939+05:30  INFO 27432 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-09T11:17:35.939+05:30  INFO 27432 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-01-09T11:17:36.038+05:30  INFO 27432 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-09T11:17:36.038+05:30  INFO 27432 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1134 ms
+2024-01-09T11:17:36.522+05:30  INFO 27432 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9092 (http) with context path ''
+2024-01-09T11:17:36.538+05:30  INFO 27432 --- [main] c.cross.cross_sell.CrossSellApplication  : Started CrossSellApplication in 2.677 seconds (process running for 4.103)
+2024-01-09T11:17:40.794+05:30  INFO 27432 --- [http-nio-9092-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-01-09T11:17:40.794+05:30  INFO 27432 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-01-09T11:17:40.795+05:30  INFO 27432 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-01-09T11:18:37.512+05:30  INFO 27432 --- [RMI TCP Connection(3)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-01-09T11:19:08.564+05:30  INFO 1632 --- [main] c.cross.cross_sell.CrossSellApplication  : Starting CrossSellApplication using Java 17.0.7 with PID 1632 (C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell\target\classes started by aadit in C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell)
+2024-01-09T11:19:08.568+05:30  INFO 1632 --- [main] c.cross.cross_sell.CrossSellApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-01-09T11:19:09.557+05:30  INFO 1632 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9092 (http)
+2024-01-09T11:19:09.572+05:30  INFO 1632 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-09T11:19:09.573+05:30  INFO 1632 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-01-09T11:19:09.658+05:30  INFO 1632 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-09T11:19:09.659+05:30  INFO 1632 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1041 ms
+2024-01-09T11:19:10.039+05:30  INFO 1632 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9092 (http) with context path ''
+2024-01-09T11:19:10.049+05:30  INFO 1632 --- [main] c.cross.cross_sell.CrossSellApplication  : Started CrossSellApplication in 2.048 seconds (process running for 3.476)
+2024-01-09T11:19:17.987+05:30  INFO 1632 --- [http-nio-9092-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-01-09T11:19:17.987+05:30  INFO 1632 --- [http-nio-9092-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-01-09T11:19:17.989+05:30  INFO 1632 --- [http-nio-9092-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-01-09T11:46:56.846+05:30  INFO 1632 --- [RMI TCP Connection(32)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-01-09T11:47:06.479+05:30  INFO 23004 --- [main] c.cross.cross_sell.CrossSellApplication  : Starting CrossSellApplication using Java 17.0.7 with PID 23004 (C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell\target\classes started by aadit in C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell)
+2024-01-09T11:47:06.482+05:30  INFO 23004 --- [main] c.cross.cross_sell.CrossSellApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-01-09T11:47:07.691+05:30  INFO 23004 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9092 (http)
+2024-01-09T11:47:07.705+05:30  INFO 23004 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-09T11:47:07.705+05:30  INFO 23004 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-01-09T11:47:07.800+05:30  INFO 23004 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-09T11:47:07.801+05:30  INFO 23004 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1266 ms
+2024-01-09T11:47:08.197+05:30  INFO 23004 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9092 (http) with context path ''
+2024-01-09T11:47:08.206+05:30  INFO 23004 --- [main] c.cross.cross_sell.CrossSellApplication  : Started CrossSellApplication in 2.08 seconds (process running for 5.769)
+2024-01-09T11:47:14.579+05:30  INFO 23004 --- [http-nio-9092-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-01-09T11:47:14.579+05:30  INFO 23004 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-01-09T11:47:14.580+05:30  INFO 23004 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-01-09T11:48:59.348+05:30  INFO 23004 --- [RMI TCP Connection(6)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-01-09T11:49:14.271+05:30  INFO 25816 --- [main] c.cross.cross_sell.CrossSellApplication  : Starting CrossSellApplication using Java 17.0.7 with PID 25816 (C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell\target\classes started by aadit in C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell)
+2024-01-09T11:49:14.275+05:30  INFO 25816 --- [main] c.cross.cross_sell.CrossSellApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-01-09T11:49:15.183+05:30  INFO 25816 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9092 (http)
+2024-01-09T11:49:15.195+05:30  INFO 25816 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-09T11:49:15.196+05:30  INFO 25816 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-01-09T11:49:15.330+05:30  INFO 25816 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-09T11:49:15.330+05:30  INFO 25816 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 976 ms
+2024-01-09T11:49:15.684+05:30  INFO 25816 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9092 (http) with context path ''
+2024-01-09T11:49:15.695+05:30  INFO 25816 --- [main] c.cross.cross_sell.CrossSellApplication  : Started CrossSellApplication in 1.78 seconds (process running for 2.603)
+2024-01-09T11:49:27.888+05:30  INFO 25816 --- [http-nio-9092-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-01-09T11:49:27.890+05:30  INFO 25816 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-01-09T11:49:27.891+05:30  INFO 25816 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-01-09T11:58:09.678+05:30  INFO 25816 --- [RMI TCP Connection(13)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2024-01-09T11:58:49.920+05:30  INFO 20136 --- [main] c.cross.cross_sell.CrossSellApplication  : Starting CrossSellApplication using Java 17.0.7 with PID 20136 (C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell\target\classes started by aadit in C:\Users\aadit\Documents\workspace-spring-tool-suite-4-4.19.1.RELEASE\cross_sell)
+2024-01-09T11:58:49.923+05:30  INFO 20136 --- [main] c.cross.cross_sell.CrossSellApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-01-09T11:58:50.870+05:30  INFO 20136 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9092 (http)
+2024-01-09T11:58:50.881+05:30  INFO 20136 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-09T11:58:50.881+05:30  INFO 20136 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-01-09T11:58:50.961+05:30  INFO 20136 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-09T11:58:50.961+05:30  INFO 20136 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 982 ms
+2024-01-09T11:58:51.338+05:30  INFO 20136 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9092 (http) with context path ''
+2024-01-09T11:58:51.347+05:30  INFO 20136 --- [main] c.cross.cross_sell.CrossSellApplication  : Started CrossSellApplication in 1.816 seconds (process running for 2.539)
+2024-01-09T11:59:00.097+05:30  INFO 20136 --- [http-nio-9092-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-01-09T11:59:00.097+05:30  INFO 20136 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-01-09T11:59:00.100+05:30  INFO 20136 --- [http-nio-9092-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-01-09T12:06:03.398+05:30  INFO 20136 --- [RMI TCP Connection(10)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.

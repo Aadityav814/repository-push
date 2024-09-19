@@ -1,0 +1,13 @@
+package com.excel.demoproject.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.excel.demoproject.entity.EmpDetails;
+
+public interface MasterRepo extends JpaRepository<EmpDetails, Long> {
+
+	List<EmpDetails> findAllStatus(String string);
+
+}

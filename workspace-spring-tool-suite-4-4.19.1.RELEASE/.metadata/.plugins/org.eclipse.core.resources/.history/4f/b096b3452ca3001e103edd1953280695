@@ -1,0 +1,21 @@
+package com.cross.cross_sell.modal;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Table(name = "CROSS_SELL_MASTER")
+@Setter
+@Getter
+public class CrossSell {
+	
+	
+private Long id;
+	
+	private String crsellValue;
+	private String isAactive;
+	private String productCode;
+
+}

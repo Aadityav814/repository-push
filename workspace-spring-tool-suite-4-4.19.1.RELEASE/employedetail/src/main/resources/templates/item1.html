@@ -1,0 +1,246 @@
+<!doctype html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+ 
+
+<head>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>RegPage</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+ 
+
+</head>
+
+ 
+
+<body style="background: #e2e2e2;">
+
+	<table border="2" class="table table-dark table-striped">
+
+		<thead>
+
+			<tr>
+
+				<th>empid</th>&nbsp
+
+				<th>firstname</th>&nbsp
+
+				<th>lastname</th>&nbsp
+
+				<th>age</th>&nbsp
+
+				<th>email</th>
+
+				<th>dateOfBirth</th>
+
+				<th>gender</th>
+
+				<th>department</th>
+
+				<th>jobTitle</th>
+
+				<th>salary</th>
+
+				<th>hireDate</th>
+
+				<th>contactInfo</th>
+
+				<th>password</th>
+
+ 
+
+ 
+
+			</tr>
+
+		</thead>
+
+		<tbody> <!-- Use Thymeleaf iteration to display data -->
+
+			<tr  th:each="item : ${items}">
+
+				<td  th:text="${item.empid}"></td>  
+
+				<td th:text="${item.firstname}"></td>  
+
+				<td th:text="${item.lastname}"></td>    
+
+				<td th:text="${item.age}"></td>        
+
+				<td th:text="${item.email}"></td>        
+
+				<td th:text="${item.dateOfBirth}"></td>   
+
+				<td th:text="${item.gender}"></td>      
+
+				<td th:text="${item.department}"></td>    
+
+				<td th:text="${item.jobTitle}"></td>     
+
+				<td th:text="${item.salary}"></td>      
+
+				<td th:text="${item.hireDate}"></td>     
+
+				<td th:text="${item.contactInfo}"></td>   
+
+				<td th:text="${item.password}"></td>    
+
+ 
+
+ 
+
+ 
+
+			</tr >
+
+			
+
+		</tbody>
+
+	</table>
+
+ 
+
+	
+ 
+
+ 
+
+	<div class="container">
+
+<div class="col-sm-2">            Total Rows: [[${totalItems}]]        </div><br>
+
+		<nav aria-label="Page navigation example"><br>
+
+			<ul class="pagination">
+
+				
+
+				
+
+				<li th:if="${currentPage !=1}" class="page-item"><a class="page-link"
+
+						th:href="@{'/excel/item1/'+${currentPage-1}}">Previous</a></li>
+
+ 
+
+ 
+
+				<li th:each="i:${#numbers.sequence(1,totalPages)}"  th:classappend="${currentPage==i? 'active' : '' }"
+
+					  class="page-item"> <a class="page-link" th:href="@{'/excel/item1/'+${i}+'?department='+softwere}">[[${i}]]</a> </li>
+
+				<span th:unless="${currentPage != i}">[[${i}]]</span>
+
+ 
+
+				<li th:if="${currentPage!=totalPages}" class="page-item"><a class="page-link"
+
+						th:href="@{'/excel/item1/'+${currentPage+1}}">Next</a></li>
+
+			</ul>
+
+		</nav>
+
+
+ 
+
+ 
+
+</body>
+
+ 
+ 
+ 
+ 
+ <!--<table>
+
+		<nav aria-label="Page navigation example">
+
+			<ul class="pagination">
+
+ 
+
+				<li th:if="${currentPage > 1}" class="page-item"><a class="page-link"
+
+						th:href="@{'/items?page=' + (currentPage - 1)}">Previous</a>
+
+				</li>
+
+				<li th:each="pageNumber : ${#numbers.sequence(1, totalPages)}"
+
+					th:classappend="${currentPage == pageNumber} ? 'active'"> <a class="page-link"
+
+						th:href="@{'/items?page=' + pageNumber}" th:text="${pageNumber}"></a> </li>
+
+						
+
+ 
+
+ 
+
+ 
+
+				<li th:each="i:${#numbers.sequence(1,totalPages)}" th:classappend="${currentPage==i ? 'active' : '' }"
+
+					class="page-item"> <a class="page-link" th:href="@{'/items/'+${i-1}}">[[${i}]]</a> </li>
+
+ 
+
+				<li th:each="pageNum : ${#numbers.sequence(1, totalPages)}" class="page-item"> <a class="page-link"
+
+						th:href="@{'/items?page=' + pageNum}" th:text="${pageNum}"></a> </li>  Next Page
+
+ 
+
+				<li th:if="${currentPage < totalPages}" class="page-item"><a class="page-link"
+
+						th:href="@{'/items?page=' + (currentPage + 1)}">Next</a></li>
+
+ 
+
+			</ul>
+
+		</nav>
+
+ 
+
+	</table>-->
+
+	<!--<ul class="pagination">
+
+		<li th:if="${currentPage > 1}"> <a th:href="@{'/items?page=' + (currentPage - 1)}">Previous</a> </li>
+
+ 
+
+		<li th:if="${currentPage < totalPages}"> <a th:href="@{'/items?page=' + (currentPage + 1)}">Next</a> </li>
+
+	</ul>-->
+
+ 
+
+	<!--<ul class="pagination">  Previous Page
+
+		<li th:if="${currentPage > 1}"> <a th:href="@{'/items?page=' + (currentPage - 1)}">Previous</a> </li>
+
+		 Page Numbers
+
+		<li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"> <a th:href="@{'/items?page=' + pageNum}"
+
+				th:text="${pageNum}"></a> </li>  Next Page
+
+		<li th:if="${currentPage < totalPages}"> <a th:href="@{'/items?page=' + (currentPage + 1)}">Next</a> </li>
+
+	</ul>-->
+
+
+</html>

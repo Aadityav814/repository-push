@@ -1,0 +1,62 @@
+package com.excel.empdetails.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.excel.demoproject.dto.MasterResdto;
+import com.excel.empdetails.eDTO.MasterResDto;
+import com.excel.empdetails.model.Employee;
+import com.excel.empdetails.service.Services;
+
+
+
+@RestController
+public class Controller {
+	
+	@Autowired
+	private Services inf;
+	
+	
+	
+	 @PostMapping("/create")
+		public ResponseEntity<MasterResDto> uploadExcel(MultipartFile file) {
+			// if (!inf.isValidExcelFile(file)) {
+			// return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			// }
+			if (!inf.isValidExcelFile(file)) {
+
+				MasterResDto res = new MasterResDto();
+				res.setMessage("uploade valid file");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+
+			}
+
+			return inf.readExcel(file);
+
+		}
+	
+	@PostMapping("/created")
+	public ResponseEntity<MasterResDto> CreateTable(@RequestBody Employee list) {
+		boolean create = inf.createEmployeeByEmail(list);
+
+		if (create) {
+
+			MasterResDto res = inf.createresponce();
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+		} else {
+			MasterResDto res = inf.createrespose();
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+		}
+	}
+
+	
+
+}

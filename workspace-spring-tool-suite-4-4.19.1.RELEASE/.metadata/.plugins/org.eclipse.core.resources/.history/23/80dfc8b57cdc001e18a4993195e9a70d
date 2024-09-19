@@ -1,0 +1,335 @@
+package com.excel.demoproject.controller;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.excel.demoproject.dto.MasterResdto;
+import com.excel.demoproject.entity.EmpDetails;
+import com.excel.demoproject.entity.Employee;
+import com.excel.demoproject.entity.Employee_Master;
+import com.excel.demoproject.entity.Sequence_M;
+import com.excel.demoproject.entity.Sequence_Master;
+import com.excel.demoproject.repository.EmployeeRepository;
+import com.excel.demoproject.repository.Servicess;
+
+
+
+@RestController
+public class EmployeeController {
+	
+	 @Autowired
+	    private EmployeeRepository employeeRepository;
+	 @Autowired
+	 private Servicess inf;
+	
+	 
+	 
+	//DynamoDB excel upload 
+	 
+	
+	  
+	 /**
+	  * Handles the creation of data by processing the uploaded Excel file.
+	  * checking is !employeeRepository.isValidExcelFile(file) valid or not 
+	  * @param file The Excel file to be processed.
+	  * @return A ResponseEntity containing information about the status of the operation.
+	  */
+	 @PostMapping("/create")
+		public ResponseEntity<MasterResdto> uploadExcel(MultipartFile file) {
+			// if (!inf.isValidExcelFile(file)) {
+			// return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			// }
+			if (!employeeRepository.isValidExcelFile(file)) {
+
+				MasterResdto res = new MasterResdto();
+				res.setMessage("uploade valid file");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+
+			}
+
+			return employeeRepository.readExcel(file);
+
+		}
+	 
+	 // Sql server data insert 
+	 
+	 @PostMapping("/createdd")
+		public ResponseEntity<MasterResdto> create(MultipartFile file) {
+			// if (!inf.isValidExcelFile(file)) {
+			// return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			// }
+			if (!inf.isValidExcelFile(file)) {
+
+				MasterResdto res = new MasterResdto();
+				res.setMessage("uploade valid file");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+
+			}
+
+			return inf.readExce(file);
+
+		}
+	 
+
+	    @PostMapping("/employee")
+	    public Employee saveEmployee(@RequestBody Employee employee) {
+	        return employeeRepository.save(employee);
+	    }
+
+	    @GetMapping("/employee/{id}")
+	    public Employee getEmployee(@PathVariable("id") String employeeId) {
+	        return employeeRepository.getEmployeeById(employeeId);
+	        
+	        
+	    }
+	    
+	    
+	    
+	    @GetMapping("/getEmployeeAll")
+	    public List<Sequence_M> getAllEntities() {
+	    	 return employeeRepository.getEmployeeAllemp();
+	    	
+	        
+	    }
+	    
+	    
+	    @GetMapping("/employe/{firstName}")
+	    public Employee getEmployeed(@PathVariable("firstName") String firstName) {
+	        return employeeRepository.getEmployeeByfname(firstName);
+	        
+	        
+	    }
+	   
+
+	    @DeleteMapping("/employee/{id}")
+	    public String deleteEmployee(@PathVariable("id") String employeeId) {
+	        return  employeeRepository.delete(employeeId);
+	    }
+
+	    @PutMapping("/employee/{id}")
+	    public String updateEmployee(@PathVariable("id") String employeeId, @RequestBody Employee employee) {
+	        return employeeRepository.update(employeeId,employee);
+	    }
+	    
+	    
+/**
+ * 
+ * @param firstName
+ * @return
+ */
+	    @GetMapping("/emp")
+	    public List<Employee> getEmployeesByFname(@RequestParam String firstName) {
+	        return employeeRepository.getEmployeesByFname(firstName);
+	    }
+	    
+//	    @GetMapping("/search/{inputKey}")
+//	    public List<Employee> searchEmployees(@PathVariable String inputKey) {
+//	        return employeeRepository.getEmployeesByInputKey(inputKey);
+//	    }
+	    
+//	    @GetMapping("/searc/{attributeValue}")
+//	    public List<Employee> searchEmployeesByAttribute(@PathVariable String attributeValue) {
+//	        return employeeRepository.getEmployeesByAttributes(attributeValue, attributeValue, attributeValue);
+//	    }
+	    
+     
+	    
+	    
+	  
+	    
+	    @GetMapping("/create")
+		public ResponseEntity<MasterResdto >readdSQLserver() {
+			
+	    	
+	    	List<EmpDetails> emp= inf.getallrecord();
+	    	
+			if (emp !=null) {
+				
+				List<Employee> er	= employeeRepository.saverecord(emp);
+				
+
+				MasterResdto res = new MasterResdto();
+				res.setMessage("data store successfull");
+				res.setList(er);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+				
+
+			}else {
+				MasterResdto res = new MasterResdto();
+				res.setMessage("empty data Table ");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+				
+			}
+			
+			}
+	    
+	    //get all by value using scan 
+	    @GetMapping("/search/{searchValue}")
+	    public List<Employee> searchEmployees(@PathVariable String searchValue) {
+	        return employeeRepository.searchEmployees(searchValue);
+	    }
+	    
+	    
+	    
+	    // get by value any using query 
+	    @GetMapping("/{attributeName}/{searchValue}")
+	    public MasterResdto searchEmployee(@PathVariable String attributeName,@PathVariable String searchValue) {
+	    	
+	    	List<Employee> emp=employeeRepository.searchEmployee(attributeName,searchValue);
+	    	
+	    	if ( emp==null) {
+	    		MasterResdto master=   new MasterResdto();
+		    	
+		    	  //master.setList(employeeRepository.searchEmployee(attributeName,searchValue));
+	    		master.setList(emp);
+		    	  master.setMessage("Ok"+" "+searchValue+" "+"it's all details ");
+		    	  master.setResult(true);
+		    	  master.setStatuscode(200);
+		    	return master;
+	    	}else {
+	    		
+	    		 MasterResdto master= new  MasterResdto();
+	    		 master.setMessage("Please enter right,"+" "+attributeName);
+		    	  master.setResult(true);
+		    	  master.setStatuscode(200);
+	    		 
+	    		 return master;
+	    	}
+	    	
+	       // return employeeRepository.searchEmployee(attributeName,searchValue);
+	    }
+	    
+	    
+	    // use other way
+	    @GetMapping("/serch1/{searchValue}")
+	    public List<Employee> searchEmployeed(@PathVariable String searchValue) {
+	        return employeeRepository.searchEmployeed(searchValue);
+	    }
+	    
+	    
+	    
+	    
+	    //scheduler using program
+	    
+	    
+//	    @Scheduled(fixedRate = 5000)
+//public ResponseEntity<MasterResdto >readdSQLserve() {
+//			
+//	    	
+//	    	List<EmpDetails> emp= inf.getallrecords();
+//	    	
+//			if (emp !=null) {
+//				
+//				List<Employee> er	= employeeRepository.saverecords(emp);
+//				
+//
+//				MasterResdto res = new MasterResdto();
+//				res.setMessage("data store successfull");
+//				
+//				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+//				
+//
+//			}else {
+//				MasterResdto res = new MasterResdto();
+//				res.setMessage("empty data Table ");
+//				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+//				
+//			}
+//			
+//			}
+	    
+ 
+	    //////////
+	    //////////
+	    
+	    //next Task 3
+	    
+	    @GetMapping("/getAllitemUpdatedbysqNo")
+	    public List<String>getAllItems() {
+	        return employeeRepository.getAllItems();
+	    }
+	    @GetMapping("/getAllitemUpdatedbysqNo/{id}")
+	    public List<String> getAllItems(@PathVariable ("id") Integer id) {
+	        return employeeRepository.getAllItems(id);
+	    }
+	    
+	    @PostMapping("/employ")
+	    public Sequence_Master saveSequenceM(@RequestBody Sequence_Master employee) {
+	        return employeeRepository.savedd(employee);
+	    }
+	    
+	    
+	    @PostMapping("/savePerson")
+	    public String savePerson(@RequestBody Map<String, String> personData) {
+	        employeeRepository.savePerson(personData);
+	        return "Person data saved successfully";
+	    }
+	    
+	    ///////////////////////////////////////////////////////////////////
+	    //////////////////////////////////////////////////////////////////////
+	    
+	    //task 3.1
+	    
+	    @PostMapping("/sequence")
+	    public Sequence_M saveSequenceM(@RequestBody Sequence_M employee) {
+	        return employeeRepository.saveddd(employee);
+	    }
+	   
+	    @PostMapping("/employd")
+	    public Employee_Master saveEmployeeM(@RequestBody Employee_Master employee) {
+	        return employeeRepository.employeeMsave(employee);
+	    }
+	    
+	    @GetMapping("/getJson")
+	    public String getJson() {
+	        return employeeRepository.getjson();
+	    }
+	   
+	    /**
+	     * Retrieves a JSON string containing key-value pairs mapped according to sequence numbers from the DynamoDB tables (Sequence_M and Employee_Master),
+	     * and returns the constructed JSON string.
+	     *
+	     * @return A JSON string containing key-value pairs mapped according to sequence numbers.
+	     */
+	    @GetMapping("/getJsons")
+	    public String getJsons() {
+	        return employeeRepository.getjsons();
+	    }
+	    
+	    
+	    /**
+	     * Retrieves a JSON string containing key-value pairs mapped according to sequence numbers
+	     * and extracted from JSON data associated with the specified ID and SK from the Employee_Master entity.
+	     *
+	     * @param id The ID to retrieve JSON data from Employee_Master entity.
+	     * @param sk The SK to retrieve JSON data from Employee_Master entity.
+	     * @return A JSON string containing key-value pairs mapped according to sequence numbers and extracted from JSON data.
+	     */
+	    @GetMapping("/getJsons/{id}/{sk}")
+	    public String getJsons(@PathVariable Integer id,@PathVariable String sk) {
+	        return employeeRepository.getjsons(id,sk);
+	    }
+	    
+//	    @GetMapping("/fetchAndSort/{id}")
+//	    public Map<String, Object> fetchAndSortRecords(@PathVariable int id) {
+//	       // List<Integer> sequence = List.of(3, 2, 1); // Change sequence as needed
+//	        return employeeRepository.fetchAndSortRecords(id);
+//	    }
+	    
+
+}

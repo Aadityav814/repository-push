@@ -1,0 +1,10 @@
+
+server.port=9190
+amazon.dynamodb.endpoint=http://localhost:8000
+amazon.aws.accesskey=Aadityav814
+amazon.aws.secretkey=fakeSecretAccessKey
+amazon.aws.region=ap-south-1
+
+
+
+

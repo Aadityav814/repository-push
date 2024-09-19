@@ -1,0 +1,151 @@
+package com.excel.demoproject.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.excel.demoproject.dto.MasterResdto;
+import com.excel.demoproject.entity.EmpDetails;
+import com.excel.demoproject.entity.Employee;
+import com.excel.demoproject.repository.EmployeeRepository;
+import com.excel.demoproject.repository.Servicess;
+
+
+
+@RestController
+public class EmployeeController {
+	
+	 @Autowired
+	    private EmployeeRepository employeeRepository;
+	 @Autowired
+	 private Servicess inf;
+	
+	 
+	 @PostMapping("/create")
+		public ResponseEntity<MasterResdto> uploadExcel(MultipartFile file) {
+			// if (!inf.isValidExcelFile(file)) {
+			// return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			// }
+			if (!employeeRepository.isValidExcelFile(file)) {
+
+				MasterResdto res = new MasterResdto();
+				res.setMessage("uploade valid file");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+
+			}
+
+			return employeeRepository.readExcel(file);
+
+		}
+	 
+	 
+	 
+	 @PostMapping("/createdd")
+		public ResponseEntity<MasterResdto> create(MultipartFile file) {
+			// if (!inf.isValidExcelFile(file)) {
+			// return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			// }
+			if (!inf.isValidExcelFile(file)) {
+
+				MasterResdto res = new MasterResdto();
+				res.setMessage("uploade valid file");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+
+			}
+
+			return inf.readExce(file);
+
+		}
+	 
+
+	    @PostMapping("/employee")
+	    public Employee saveEmployee(@RequestBody Employee employee) {
+	        return employeeRepository.save(employee);
+	    }
+
+	    @GetMapping("/employee/{id}")
+	    public Employee getEmployee(@PathVariable("id") String employeeId) {
+	        return employeeRepository.getEmployeeById(employeeId);
+	        
+	        
+	    }
+	    @GetMapping("/employe/{firstName}")
+	    public Employee getEmployeed(@PathVariable("firstName") String firstName) {
+	        return employeeRepository.getEmployeeByfname(firstName);
+	        
+	        
+	    }
+	   
+
+	    @DeleteMapping("/employee/{id}")
+	    public String deleteEmployee(@PathVariable("id") String employeeId) {
+	        return  employeeRepository.delete(employeeId);
+	    }
+
+	    @PutMapping("/employee/{id}")
+	    public String updateEmployee(@PathVariable("id") String employeeId, @RequestBody Employee employee) {
+	        return employeeRepository.update(employeeId,employee);
+	    }
+	    
+	    @GetMapping("/emp")
+	    public List<Employee> getEmployeesByFname(@RequestParam String firstName) {
+	        return employeeRepository.getEmployeesByFname(firstName);
+	    }
+	    
+//	    @GetMapping("/search/{inputKey}")
+//	    public List<Employee> searchEmployees(@PathVariable String inputKey) {
+//	        return employeeRepository.getEmployeesByInputKey(inputKey);
+//	    }
+	    
+//	    @GetMapping("/searc/{attributeValue}")
+//	    public List<Employee> searchEmployeesByAttribute(@PathVariable String attributeValue) {
+//	        return employeeRepository.getEmployeesByAttributes(attributeValue, attributeValue, attributeValue);
+//	    }
+	    
+
+	    @GetMapping("/search/{searchValue}")
+	    public List<Employee> searchEmployees(@PathVariable String searchValue) {
+	        return employeeRepository.searchEmployees(searchValue);
+	    }
+	    
+	    
+	    @GetMapping("/create")
+		public ResponseEntity<MasterResdto >readdSQLserver() {
+			
+	    	
+	    	List<EmpDetails> emp= inf.getallrecord();
+	    	
+			if (emp !=null) {
+				
+				List<Employee> emp	 employeeRepository.saverecord(emp);
+				
+
+				MasterResdto res = new MasterResdto();
+				res.setMessage("data store successfull");
+				res.setList(null)
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+				
+
+			}else {
+				MasterResdto res = new MasterResdto();
+				res.setMessage("empty data Table ");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+				
+			}
+			
+			}
+	    
+
+}

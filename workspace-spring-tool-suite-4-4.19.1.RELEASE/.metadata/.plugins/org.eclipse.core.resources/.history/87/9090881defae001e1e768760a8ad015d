@@ -1,0 +1,195 @@
+package com.excel.demoproject.repository;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+
+import com.excel.demoproject.dto.MasterResdto;
+import com.excel.demoproject.entity.Employee;
+import com.excel.demoproject.service.DynamoDBService;
+
+import io.micrometer.common.util.StringUtils;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.BatchWriteItemEnhancedRequest;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+
+@Repository
+public class EmployeeRepository {
+	
+	@Autowired
+    private DynamoDBMapper dynamoDBMapper;
+	
+	
+	 private final DynamoDbClient dynamoDbClient;
+	    private final DynamoDbEnhancedClient enhancedClient;
+
+	    @Autowired
+	    public EmployeeRepository(DynamoDbClient dynamoDbClient, DynamoDbEnhancedClient enhancedClient) {
+	        this.dynamoDbClient = dynamoDbClient;
+	        this.enhancedClient = enhancedClient;
+	    }
+
+	@Autowired
+    private DynamoDBService dynamoDBService;
+	 
+	private static final String EXCEL_EXTENSION = ".xlsx"; 
+
+    public Employee save(Employee employee) {
+        dynamoDBMapper.save(employee);
+        return employee;
+    }
+
+    public Employee getEmployeeById(String employeeId) {
+        return dynamoDBMapper.load(Employee.class, employeeId);
+    }
+
+    public String delete(String employeeId) {
+        Employee emp = dynamoDBMapper.load(Employee.class, employeeId);
+        dynamoDBMapper.delete(emp);
+        return "Employee Deleted!";
+    }
+
+    public String update(String employeeId, Employee employee) {
+        dynamoDBMapper.save(employee,
+                new DynamoDBSaveExpression()
+        .withExpectedEntry("employeeId",
+                new ExpectedAttributeValue(
+                        new AttributeValue().withS(employeeId)
+                )));
+        return employeeId;
+    }
+
+	public boolean isValidExcelFile(MultipartFile file) {
+		// TODO Auto-generated method stub
+		String originalFilename = file.getOriginalFilename();
+
+		return (originalFilename != null && originalFilename.toLowerCase().endsWith(EXCEL_EXTENSION));
+	}
+
+	
+
+	public void saveToDynamoDB(List<Employee> list) {
+		// TODO Auto-generated method stub
+		EnhancedDynamoDbTable<Employee> table = enhancedClient.table("employee", TableSchema.fromBean(Employee.class));
+
+        BatchWriteItemEnhancedRequest batchWriteItemEnhancedRequest = BatchWriteItemEnhancedRequest.builder()
+                .writeBatches(table.writeBatches().addAll(list))
+                .build();
+
+        table.batchWriteItem(batchWriteItemEnhancedRequest);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	public ResponseEntity<MasterResdto> readExcel(MultipartFile file) {
+//		// TODO Auto-generated method stub
+//					List<Employee> list=new ArrayList<>();
+//					try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+//						Sheet sheet = workbook.getSheetAt(0);
+//						int rowNumber = 0;
+//						Iterator<Row> rowIterator = sheet.iterator();
+//
+//						while (rowIterator.hasNext()) {
+//
+//							Row row = rowIterator.next();
+//							Boolean isrowEmpty = checkIfRowIsEmpty(sheet.getRow(1));
+//
+//							if (isrowEmpty) {
+//
+//								MasterResdto res = new MasterResdto();
+//
+//								res.setMessage("data not found");
+//
+//								return ResponseEntity.status(HttpStatus.OK).body(res);
+//							}
+//
+//							if (rowNumber == 0) {
+//								rowNumber++;
+//								continue;
+//							}
+//
+//							Iterator<Cell> cellIterator = row.cellIterator();
+//
+//						Employee dto = new Employee();
+//
+//							if (cellIterator.hasNext()) {
+//								dto.setFirstName(cellIterator.next().toString());
+//							}
+//							if (cellIterator.hasNext()) {
+//								dto.setLastName(cellIterator.next().toString());
+//							}
+//							if (cellIterator.hasNext()) {
+//								dto.setEmail(cellIterator.next().toString());
+//							}
+//							
+//							 list.add(dto);
+//
+//							
+//
+//						}
+//						
+//						 dynamoDBService.saveToDynamoDB(list);
+//
+//
+//						MasterResdto res = new MasterResdto();
+//						res.setResult(true);
+//						res.setMessage("file uploaded successful");
+//						res.setStatuscode(200);
+//						res.setList(list);
+//						
+//						return ResponseEntity.status(HttpStatus.ACCEPTED).body(res);
+//					} catch (IOException e) {
+//						// Handle the exception
+//
+//						return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//					}
+//	}
+//
+//	
+//	private boolean checkIfRowIsEmpty(Row row) {
+//		if (row == null) {
+//			return true;
+//		}
+//		if (row.getLastCellNum() <= 0) {
+//			return true;
+//		}
+//		for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+//			Cell cell = row.getCell(cellNum);
+//			if (cell != null && cell.getCellType() != CellType.BLANK && StringUtils.isNotBlank(cell.toString())) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
+
+
+	
+}

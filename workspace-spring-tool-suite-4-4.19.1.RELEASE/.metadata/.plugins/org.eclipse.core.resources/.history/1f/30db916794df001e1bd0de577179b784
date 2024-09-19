@@ -1,0 +1,1121 @@
+package com.excel.demoproject.repository;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+
+import com.excel.demoproject.dto.MasterResdto;
+import com.excel.demoproject.entity.EmpDetails;
+import com.excel.demoproject.entity.Employee;
+import com.excel.demoproject.entity.Employee_Master;
+import com.excel.demoproject.entity.Sequence_M;
+import com.excel.demoproject.entity.Sequence_Master;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.micrometer.common.util.StringUtils;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.BatchWriteItemEnhancedRequest;
+import software.amazon.awssdk.enhanced.dynamodb.model.WriteBatch;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+
+@Repository
+public class EmployeeRepository {
+
+	@Autowired
+	private DynamoDBMapper dynamoDBMapper;
+	private MasterRepo ex;
+
+	private static final String EXCEL_EXTENSION = ".xlsx";
+
+	public Employee save(Employee employee) {
+		dynamoDBMapper.save(employee);
+		return employee;
+	}
+
+	public Employee getEmployeeById(String employeeId) {
+		return dynamoDBMapper.load(Employee.class, employeeId);
+	}
+
+	public String delete(String employeeId) {
+		Employee emp = dynamoDBMapper.load(Employee.class, employeeId);
+		dynamoDBMapper.delete(emp);
+		return "Employee Deleted!";
+	}
+
+	public String update(String employeeId, Employee employee) {
+		dynamoDBMapper.save(employee, new DynamoDBSaveExpression().withExpectedEntry("employeeId",
+				new ExpectedAttributeValue(new AttributeValue().withS(employeeId))));
+		return employeeId;
+	}
+	
+
+	public boolean isValidExcelFile(MultipartFile file) {
+		// TODO Auto-generated method stub
+		String originalFilename = file.getOriginalFilename();
+
+		return (originalFilename != null && originalFilename.toLowerCase().endsWith(EXCEL_EXTENSION));
+	}
+
+//	public void saveToDynamoDB(List<Employee> list) {
+//		// TODO Auto-generated method stub
+//		EnhancedDynamoDbTable<Employee> table = enhancedClient.table("employee", Employee.class);
+//
+//        WriteBatch.Builder<Employee> writeBatchBuilder = WriteBatch.builder(Employee.class);
+//        list.forEach(writeBatchBuilder::addPutItem);
+//
+//        table.writeBatches().executeWriteBatch(writeBatchBuilder.build());
+//    }
+//		
+//	}
+	
+	
+	
+	
+	/**
+	 * *
+	 * in this method we parse MultipartFile file
+	 * 
+	 * first check null or empty file
+	 * if (file == null || file.isEmpty()) {
+			MasterResdto res = new MasterResdto();
+			res.setMessage("File is null or empty");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+		}
+ 
+	 * 
+	 * then read data from excel sheet 
+	 * 
+	 * 
+	 * Iterate 
+	 * Iterator<Row> rowIterator = sheet.iterator();
+
+	 * 
+	 * 
+	 * 
+	 */
+	
+	
+	
+	
+	
+	/**
+	 * Reads an Excel file uploaded via MultipartFile, parses the data, saves it to a list of Employee objects,
+	 * and then stores the data in DynamoDB. It also checks for various conditions such as null or empty file,
+	 * empty rows, and handles exceptions appropriately.
+	 *
+	 * @param file The Excel file uploaded via MultipartFile.
+	 * @return ResponseEntity containing the response message and status code based on the success or failure of the operation,
+	 * along with a MasterResdto object containing the result status, message, and list of processed Employee objects.
+	 */
+	
+
+	public ResponseEntity<MasterResdto> readExcel(MultipartFile file) {
+		// TODO Auto-generated method stub
+
+		if (file == null || file.isEmpty()) {
+			MasterResdto res = new MasterResdto();
+			res.setMessage("File is null or empty");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+		}
+
+		List<Employee> list = new ArrayList<>();
+		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+			Sheet sheet = workbook.getSheetAt(0);
+			int rowNumber = 0;
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				Boolean isRowEmpty = checkIfRowIsEmpty(row);
+
+				if (isRowEmpty) {
+					MasterResdto res = new MasterResdto();
+					res.setMessage("Data not found");
+					return ResponseEntity.status(HttpStatus.OK).body(res);
+				}
+
+				if (rowNumber == 0) {
+					rowNumber++;
+					continue;
+				}
+
+				Iterator<Cell> cellIterator = row.cellIterator();
+				Employee dto = new Employee();
+
+				if (cellIterator.hasNext()) {
+					dto.setFirstName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setLastName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setEmail(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setDate(cellIterator.next().toString());
+				}
+				list.add(dto);
+				
+				
+
+				dynamoDBMapper.save(dto);
+			}
+
+			MasterResdto res = new MasterResdto();
+			res.setResult(true);
+			res.setMessage("File uploaded successfully");
+			res.setStatuscode(200);
+			res.setList(list);
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(res);
+		} catch (IOException e) {
+			// Handle the exception
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+	
+	/**
+	 * Checks if a given row in an Excel sheet is empty.
+	 *
+	 * @param row The row to be checked for emptiness.
+	 * @return True if the row is empty, false otherwise.
+	 */
+
+	private boolean checkIfRowIsEmpty(Row row) {
+		if (row == null) {
+			return true;
+		}
+		if (row.getLastCellNum() <= 0) {
+			return true;
+		}
+		for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+			Cell cell = row.getCell(cellNum);
+			if (cell != null && cell.getCellType() != CellType.BLANK && StringUtils.isNotBlank(cell.toString())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public Employee getEmployeeByfname(String firstName) {
+
+		// TODO Auto-generated method stub
+		return dynamoDBMapper.load(Employee.class, firstName);
+
+	}
+
+	public List<Employee> getEmployeesByFname(String firstName) {
+
+		// TODO Auto-generated method stub
+		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression().withFilterExpression("firstName = :val1")
+				.withExpressionAttributeValues(
+						Collections.singletonMap(":val1", new AttributeValue().withS(firstName)));
+
+		return dynamoDBMapper.scan(Employee.class, scanExpression);
+	}
+
+	public List<Employee> getEmployeesByInputKey(String inputKey) {
+		// TODO Auto-generated method stub
+		try {
+			Map<String, AttributeValue> attributeValues = new HashMap<>();
+			attributeValues.put(":val1", new AttributeValue().withS(inputKey));
+
+			DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+					.withKeyConditionExpression("inputKey = :val1").withExpressionAttributeValues(attributeValues);
+
+			return dynamoDBMapper.query(Employee.class, queryExpression);
+
+		} catch (Exception e) {
+			// Handle exceptions appropriately (log, throw, etc.)
+			e.printStackTrace(); // Example: print the stack trace for simplicity
+			return Collections.emptyList(); // Return an empty list or handle error response
+		}
+	}
+
+//	 public List<Employee> getEmployeesByAttributes(String firstName, String lastName, String email) {
+//		 try {
+//	            DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+//	            Map<String, AttributeValue> attributeValues = new HashMap<>();
+//
+//	            if (firstName != null) {
+//	                scanExpression.withFilterExpression("firstName = :val1");
+//	                attributeValues.put(":val1", new AttributeValue().withS(firstName));
+//	            }
+//
+//	            if (lastName != null) {
+//	                scanExpression.withFilterExpression("lastName = :val2");
+//	                attributeValues.put(":val2", new AttributeValue().withS(lastName));
+//	            }
+//
+//	            if (email != null) {
+//	                scanExpression.withFilterExpression("email = :val3");
+//	                attributeValues.put(":val3", new AttributeValue().withS(email));
+//	            }
+//
+//	            if (!attributeValues.isEmpty()) {
+//	                scanExpression.withExpressionAttributeValues(attributeValues);
+//	            }
+//
+//	            return dynamoDBMapper.scan(Employee.class, scanExpression);
+//
+//	        } catch (Exception e) {
+//	            // Handle exceptions appropriately (log, throw, etc.)
+//	            e.printStackTrace(); // Example: print the stack trace for simplicity
+//	            return Collections.emptyList(); // Return an empty list or handle error response
+//	        }
+//	    }
+
+	public List<Employee> searchEmployees(String searchValue) {
+		// TODO Auto-generated method stub
+		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+		scanExpression.withFilterExpression("firstName = :val OR lastName = :val OR email = :val OR #date = :val")
+				.withExpressionAttributeNames(Collections.singletonMap("#date", "date")).withExpressionAttributeValues(
+						Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+
+		return dynamoDBMapper.scan(Employee.class, scanExpression);
+	}
+
+	public ResponseEntity<MasterResdto> readExce(MultipartFile file) {
+		// TODO Auto-generated method stub
+
+		if (file == null || file.isEmpty()) {
+			MasterResdto res = new MasterResdto();
+			res.setMessage("File is null or empty");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+		}
+
+		List<EmpDetails> list = new ArrayList<>();
+		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+			Sheet sheet = workbook.getSheetAt(0);
+			int rowNumber = 0;
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				Boolean isRowEmpty = checkIfRowIsEmpty(row);
+
+				if (isRowEmpty) {
+					MasterResdto res = new MasterResdto();
+					res.setMessage("Data not found");
+					return ResponseEntity.status(HttpStatus.OK).body(res);
+				}
+
+				if (rowNumber == 0) {
+					rowNumber++;
+					continue;
+				}
+
+				Iterator<Cell> cellIterator = row.cellIterator();
+				EmpDetails dto = new EmpDetails();
+
+				if (cellIterator.hasNext()) {
+					dto.setFirstName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setLastName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setEmail(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setDate(cellIterator.next().toString());
+				}
+				list.add(dto);
+
+			}
+			ex.saveAll(list);
+
+			MasterResdto res = new MasterResdto();
+			res.setResult(true);
+			res.setMessage("File uploaded successfully");
+			res.setStatuscode(200);
+			res.setLis(list);
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(res);
+		} catch (IOException e) {
+			// Handle the exception
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+
+	public List<Employee> saverecord(List<EmpDetails> emp) {
+		// TODO Auto-generated method stub
+
+		List<Employee> dynamoDBEmployees = emp.stream().map(this::convertToEmployee).collect(Collectors.toList());
+		dynamoDBMapper.batchSave(dynamoDBEmployees);
+
+		return dynamoDBEmployees;
+
+	}
+
+	private Employee convertToEmployee(EmpDetails employee) {
+		Employee dynamoDBEmployee = new Employee();
+		dynamoDBEmployee.setFirstName(employee.getFirstName());
+		dynamoDBEmployee.setLastName(employee.getLastName());
+		dynamoDBEmployee.setEmail(employee.getEmail());
+		dynamoDBEmployee.setDate(employee.getDate());
+		// Set other attributes if needed
+		return dynamoDBEmployee;
+	}
+
+	
+	
+	/**
+	 * Searches for employees based on the provided attribute name and search value.
+	 *
+	 * @param attributeName The name of the attribute to search for (e.g "firstname", "lastname", "email", "date").
+	 * @param searchValue   The value to search for within the specified attribute.
+	 * @return A list of Employee objects matching the search criteria.
+	 */
+	public List<Employee> searchEmployee(String attributeName,String searchValue) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		Map<String, AttributeValue> eav = new HashMap<>();
+        eav.put(":val1", new AttributeValue().withS(searchValue));
+
+        String keyConditionExpression = getKeyConditionExpression(attributeName);
+
+        DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+                .withIndexName(getIndexName(attributeName))
+                .withConsistentRead(false)
+                .withKeyConditionExpression(keyConditionExpression)
+                .withExpressionAttributeValues(eav);
+        if (attributeName.equalsIgnoreCase("date")) {
+            queryExpression = queryExpression.withExpressionAttributeNames(
+                Collections.singletonMap("#dt", "date")
+            );}
+
+        return dynamoDBMapper.query(Employee.class, queryExpression);
+		
+		
+		
+		
+		
+
+//		DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//				.withIndexName("LastNameIndex") // Assuming you have an index on the firstName attribute
+//				.withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//				.withKeyConditionExpression("lastName = :val").withExpressionAttributeValues(
+//						Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//		return dynamoDBMapper.query(Employee.class, queryExpression);
+
+//		  DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//	                .withIndexName("FirstNameIndex") // Assuming you have an index on the firstName attribute
+//	                .withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//	                .withKeyConditionExpression("firstName = :val OR lastName = :val OR email = :val OR #date = :val")
+//	                .withFilterExpression("lastName = :val OR email = :val OR #date = :val")
+//	                .withExpressionAttributeNames(Collections.singletonMap("#date", "date"))
+//	                .withExpressionAttributeValues(Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//	        return dynamoDBMapper.query(Employee.class, queryExpression);
+//	    
+
+	}
+	
+	/**
+	 * Gets the index name based on the provided attribute name.
+	 *
+	 * @param attributeName The name of the attribute for which the index name is required.
+	 * @return The name of the index associated with the provided attribute name.
+	 * @throws IllegalArgumentException If an invalid attribute name is provided.
+	 */
+	private String getIndexName(String attributeName) {
+		// TODO Auto-generated method stub
+		 switch (attributeName.toLowerCase()) {
+         case "firstname":
+             return "FirstNameIndex";
+         case "lastname":
+             return "LastNameIndex";
+         case "email":
+             return "EmailIndex";
+         case "date":
+             return "DateIndex"; // Assuming you have an index for date
+         default:
+             throw new IllegalArgumentException("Invalid attribute name provided");
+     }
+	}
+
+	
+	/**
+	 * Constructs the key condition expression based on the provided attribute name.
+	 *
+	 * @param attributeName The name of the attribute for which the key condition expression is needed.
+	 * @return The key condition expression based on the provided attribute name.
+	 * @throws IllegalArgumentException If an invalid attribute name is provided.
+	 */
+	private String getKeyConditionExpression(String attributeName) {
+		// TODO Auto-generated method stub
+		 switch (attributeName.toLowerCase()) {
+         case "firstname":
+             return "firstName = :val1";
+         case "lastname":
+             return "lastName = :val1";
+         case "email":
+             return "email = :val1";
+         case "date":
+        	 return "#dt = :val1"; // Adjust this condition based on your actual attribute name
+         default:
+             throw new IllegalArgumentException("Invalid attribute name provided");
+     }
+	}
+
+	
+	/**
+	 *  Save the Employee based on provide emp
+	 *  
+	 * @param emp parse the EmpDetailse to save in dynamoDB local
+	 * @return the saverecords method return Employee  (employee details)
+	 */
+	public Employee saverecords(EmpDetails emp) {
+		// TODO Auto-generated method stub
+		Employee dynamoDBEmployees = new Employee();
+		dynamoDBEmployees.setFirstName(emp.getFirstName());
+		dynamoDBEmployees.setLastName(emp.getLastName());
+		dynamoDBEmployees.setEmail(emp.getEmail());
+		dynamoDBEmployees.setDate(emp.getDate());
+		
+		dynamoDBMapper.save(dynamoDBEmployees);
+
+		return dynamoDBEmployees;
+	}
+	
+	
+	
+	
+/**
+ * 
+ * @param searchValue  
+ * @return
+ */
+	public List<Employee> searchEmployeed(String searchValue) {
+		// TODO Auto-generated method stub
+		Map<String, String> expressionAttributeNames = new HashMap<>();
+		expressionAttributeNames.put("#firstName", "firstName");
+		expressionAttributeNames.put("#lastName", "lastName");
+		expressionAttributeNames.put("#email", "email");
+		expressionAttributeNames.put("#date", "date"); // Using # to denote reserved keyword
+
+		// Create a map for expression attribute values
+		Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+		expressionAttributeValues.put(":val", new AttributeValue().withS(searchValue));
+
+		// Create the query expression
+		DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+		    .withExpressionAttributeNames(expressionAttributeNames)
+		    .withExpressionAttributeValues(expressionAttributeValues);
+
+		// Define the filter expression instead of key condition expression
+		String filterExpression = "#firstName = :val OR #lastName = :val OR #email = :val OR #date = :val";
+
+		// Set the filter expression
+		queryExpression.withFilterExpression(filterExpression);
+
+		// Execute the query
+		return dynamoDBMapper.query(Employee.class, queryExpression);
+		
+		
+		
+		
+		
+		
+//		 Map<String, AttributeValue> eav = new HashMap<>();
+//		    eav.put(":val", new AttributeValue().withS(searchValue));
+//
+//		    // Create the query expression
+//		    DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//		            .withKeyConditionExpression("firstName = :val OR lastName = :val OR email = :val OR date = :val")
+//		            .withExpressionAttributeValues(eav);
+//
+//		    // Execute the query
+//		    return dynamoDBMapper.query(Employee.class, queryExpression);
+        
+        
+        
+//      if (attributeName.equalsIgnoreCase("date")) {
+//      queryExpression = queryExpression.withExpressionAttributeNames(
+//          Collections.singletonMap("#dt", "date")
+//      );}
+	}
+	
+	
+	/**
+	 * Saves the provided Sequence_Master object to the DynamoDB database.
+	 *
+	 * @param employee The Sequence_Master object to be saved.
+	 * @return The saved Sequence_Master object.
+	 */
+	public Sequence_Master savedd(Sequence_Master employee) {
+		// TODO Auto-generated method stub
+		 dynamoDBMapper.save(employee);
+		 return employee;
+		
+	}
+
+	
+	/**
+	 * Saves the person data provided in the form of a map to the DynamoDB database.
+	 *
+	 * @param personData A map containing the person's data where the keys represent attribute names and the values represent attribute values.
+	 */
+	public void savePerson(Map<String, String> personData) {
+		// TODO Auto-generated method stub
+		
+		Sequence_Master seq= new Sequence_Master();
+		 seq.setKey(new ArrayList<>(personData.keySet()));
+	        seq.setValue(new ArrayList<>(personData.values()));
+	        dynamoDBMapper.save(seq);
+		
+	}
+	
+	
+/**
+ * Retrieves all items from the DynamoDB database, sorts the values based on sequence numbers,
+ * and returns a list of sorted values.
+ *
+ * @return A list of sorted values retrieved from the DynamoDB database.
+ */
+	public List<String>getAllItems() {
+		// TODO Auto-generated method stub
+		  DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+		  List<Sequence_Master> allrecord =dynamoDBMapper.scan(Sequence_Master.class, scanExpression);
+		 // List<String>allupdated =new ArrayList<>();
+		  List<String> sortedValues = new ArrayList<>();
+		  //List<List<String>>Stored= new ArrayList<>();
+		  for (Sequence_Master entity : allrecord) {
+			  
+			  
+			 List<Integer> a= entity.getSeqNo();
+			 List<String>b=entity.getValue();
+			 
+			
+
+		        // Create a temporary list to hold values in sorted order
+		        List<String> tempValues = new ArrayList<>(b.size());
+		        for (int i = 0; i < b.size(); i++) {
+		            tempValues.add("");
+		        }
+
+		        // Populate the temporary list according to the sequence numbers
+		        for (int i = 0; i < a.size(); i++) {
+		            int index = a.get(i) - 1; // Adjust index to start from 0
+		            tempValues.set(index, b.get(i));
+		        }
+
+		        // Add values from the temporary list to the sortedValues list
+		        for (String value : tempValues) {
+		            sortedValues.add(value);
+		            
+		        }
+
+		       
+		        
+			  
+		  }
+		  //return Stored;
+		  
+	       // return allrecord;
+		 return sortedValues;
+		 
+	}
+
+	
+	
+
+	/**
+	 * Retrieves all items associated with the specified ID from the DynamoDB database,
+	 * sorts the values based on sequence numbers, and returns a list of sorted values.
+	 *
+	 * @param id The ID of the items to retrieve from the DynamoDB database.
+	 * @return A list of sorted values associated with the specified ID, or null if no items are found for the ID.
+	 */
+	public List <String >getAllItems(Integer id) {
+		// TODO Auto-generated method stub
+		Sequence_Master emp=dynamoDBMapper.load(Sequence_Master.class, id);
+		 if (emp!=null) {
+		List<Integer> a= emp.getSeqNo();
+		 List<String>b=emp.getValue();
+		 List<String> sortedValues = new ArrayList<>();
+		
+
+	        // Create a temporary list to hold values in sorted order
+	        List<String> tempValues = new ArrayList<>(b.size());
+	        for (int i = 0; i < b.size(); i++) {
+	            tempValues.add("");
+	        }
+
+	        // Populate the temporary list according to the sequence numbers
+	        for (int i = 0; i < a.size(); i++) {
+	            int index = a.get(i) - 1; // Adjust index to start from 0
+	            tempValues.set(index, b.get(i));
+	        }
+
+	        // Add values from the temporary list to the sortedValues list
+	        for (String value : tempValues) {
+	            sortedValues.add(value);
+	            
+	        }
+	        return sortedValues;
+	        }else {
+	        	return null;
+	        }
+		
+		
+	}
+
+	
+	/**
+	 * Saves the provided Sequence_M object to the DynamoDB database.
+	 * @param employee The Sequence_M object to be saved.
+	 * @return The saved Sequence_M object.
+	 */
+	public Sequence_M saveddd(Sequence_M employee) {
+		// TODO Auto-generated method stub
+		 dynamoDBMapper.save(employee);
+		 return employee;
+	}
+
+	
+	
+	
+	public Employee_Master employeeMsave(Employee_Master employee) {
+		// TODO Auto-generated method stub
+		
+		dynamoDBMapper.save(employee);
+		 return employee;
+		
+	}
+
+	/**
+	 * correct output but not right format.
+	 * right format is below 
+	 */
+	/**
+	 * Retrieves data from DynamoDB tables (Sequence_M and Employee_Master), sorts the Sequence_M entities based on sequence number,
+	 * retrieves corresponding values from Employee_Master entities using JSON data, constructs a JSON output string containing
+	 * key-value pairs, and returns the JSON string.
+	 *
+	 * @return A JSON string containing key-value pairs extracted from DynamoDB tables.
+	 */
+	public String getjson() {
+		// TODO Auto-generated method stub
+		 List<Sequence_M> seqMasterEntities = dynamoDBMapper.scan(Sequence_M.class, new DynamoDBScanExpression());
+	        List<Employee_Master> empMasterEntities = dynamoDBMapper.scan(Employee_Master.class, new DynamoDBScanExpression());
+
+	        
+	        List<Sequence_M> sortedSequenceEntities = seqMasterEntities.stream()
+	                .sorted(Comparator.comparingInt(Sequence_M::getSeqNo)).collect(Collectors.toList());
+	        
+	        
+	        
+	        
+	        
+	        
+	        StringBuilder output = new StringBuilder("OUT_JSON {{");
+	        for (Sequence_M sequenceEntity : sortedSequenceEntities) {
+	            String key = sequenceEntity.getKey();
+	            String value = "";
+	            // Get corresponding value from employeeEntities JSON
+	            Employee_Master employeeEntity = empMasterEntities.stream()
+	                    .filter(e -> e.getSk().equals(sequenceEntity.getSk())).findFirst().orElse(null);
+	            if (employeeEntity != null) {
+	                // Extract value from JSON
+	                value = getValueFromJsons(employeeEntity.getJson(), key);
+	            }
+	            // Append key-value pair to output
+	            output.append(key).append(":").append(value).append(",");
+	        }
+	        // Remove trailing comma and append closing bracket
+	        output.deleteCharAt(output.length() - 1);
+	        output.append("}}");
+
+	        return output.toString();
+	        
+	        
+	        
+	        
+	        
+	        
+	        // Apply sequence and generate output JSON
+//	        StringBuilder output = new StringBuilder("OUT_JSON{{");
+//	        for (Sequence_M seqMasterEntity : seqMasterEntities) {
+//	            for (Employee_Master empMasterEntity : empMasterEntities) {
+//	                // Match the sequence number with the keys in JSON
+//	                if (seqMasterEntity.getKey().equals("FirstName")) {
+//	                    output.append("fName:").append(getValueFromJson(empMasterEntity.getJson(), "FirstName")).append(",");
+//	                } else if (seqMasterEntity.getKey().equals("MiddleName")) {
+//	                    output.append("mName:").append(getValueFromJson(empMasterEntity.getJson(), "MiddleName")).append(",");
+//	                } else if (seqMasterEntity.getKey().equals("Address")) {
+//	                    output.append("Address:").append(getValueFromJson(empMasterEntity.getJson(), "Address")).append(",");
+//	                } else if (seqMasterEntity.getKey().equals("LastName")) {
+//	                    output.append("LastName:").append(getValueFromJson(empMasterEntity.getJson(), "LastName")).append(",");
+//	                }
+//	            }
+//	        }
+//	        // Remove trailing comma and append closing bracket
+//	        output.deleteCharAt(output.length() - 1);
+//	        output.append("}}");
+//
+//	        return output.toString();
+	}
+
+	
+	/**
+	 * Retrieves the value associated with the specified key from the given JSON string.
+	 *
+	 * @param json The JSON string from which to retrieve the value.
+	 * @param key  The key for which to retrieve the value.
+	 * @return The value associated with the specified key in the JSON string, or null if the key is not found or if there is an error parsing the JSON string.
+	 */
+	private String getValueFromJsons(String json, String key) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		 try {
+//			 // Convert invalid JSON string to valid JSON format
+//			// json = json.replaceAll("([a-zA-Z]+)(:)","\"$1\":").replaceAll("'", "\"");
+//			 
+//			// json = json.replaceAll("(\\w+)(:)","\"$1\":").replaceAll("'", "\"");
+			 
+			 
+			 
+			 
+		        // Parse JSON string to JsonNode
+		        JsonNode rootNode = new ObjectMapper().readTree(json);
+
+		        // Get value corresponding to the key
+		        JsonNode valueNode = rootNode.get(key);
+
+		        // Check if valueNode is not null and return its text value
+		        if (valueNode != null) {
+		            return valueNode.asText();
+		        }
+		    } catch (Exception e) {
+		        // Handle JSON parsing exceptions
+		        e.printStackTrace(); // You should handle exceptions appropriately in your application
+		    }
+		    return null;
+		
+		
+		
+//		try {
+//	        // Create ObjectMapper instance
+//	        ObjectMapper objectMapper = new ObjectMapper();
+//
+//	        // Parse JSON string to JsonNode
+//	        JsonNode rootNode = objectMapper.readTree(json);
+//
+//	        // Get value corresponding to the key
+//	        JsonNode valueNode = rootNode.get(key);
+//
+//	        // Check if valueNode is not null and return its text value
+//	        if (valueNode != null) {
+//	            return valueNode.asText();
+//	        }
+//	    } catch (Exception e) {
+//	        // Handle JSON parsing exceptions
+//	        e.printStackTrace(); // You should handle exceptions appropriately in your application
+//	    }
+//		
+//		 return null;
+	    
+	}
+
+	
+	
+	
+	
+	/**
+	 * Retrieves data from DynamoDB tables (Sequence_M and Employee_Master), constructs a JSON string containing
+	 * key-value pairs mapped according to sequence numbers, and returns the JSON string.
+	 *
+	 * @return A JSON string containing key-value pairs mapped according to sequence numbers.
+	 */
+	public String getjsons() {
+		// TODO Auto-generated method stub
+		 List<Sequence_M> seqMasterEntities = dynamoDBMapper.scan(Sequence_M.class, new DynamoDBScanExpression());
+	        List<Employee_Master> empMasterEntities = dynamoDBMapper.scan(Employee_Master.class, new DynamoDBScanExpression());
+
+	        // Map sequence number to corresponding key
+	        Map<Integer, String> sequenceMap = new TreeMap<>();
+	        for (Sequence_M sequenceEntity : seqMasterEntities) {
+	            sequenceMap.put(sequenceEntity.getSeqNo(), sequenceEntity.getKey());
+	        }
+
+	        // Construct output JSON
+	        StringBuilder output = new StringBuilder("OUT_JSON {");
+	        for (Employee_Master employeeEntity : empMasterEntities) {
+	            output.append("{");
+	            for (Map.Entry<Integer, String> entry : sequenceMap.entrySet()) {
+	                Integer seqNo = entry.getKey();
+	                String key = entry.getValue();
+	                String value = getValueFromJsons(employeeEntity.getJson(), key);
+	                output.append(key).append(":").append(value).append(",");
+	            }
+	            // Remove trailing comma and close the JSON object
+	            output.deleteCharAt(output.length() - 1);
+	            output.append("},");
+	        }
+	        // Remove trailing comma and append closing bracket
+	        output.deleteCharAt(output.length() - 1);
+	        output.append("}");
+
+	        return output.toString();
+	}
+
+	
+	
+	/**
+	 * Retrieves data from DynamoDB tables (Sequence_M and Employee_Master), sorts the Sequence_M entities based on sequence number,
+	 * constructs a JSON string containing key-value pairs mapped according to sequence numbers, retrieves JSON data by ID and SK from
+	 * Employee_Master entity, extracts values from JSON data based on keys from Sequence_M entities, and returns the constructed JSON string.
+	 *
+	 * @param id The ID to retrieve JSON data from Employee_Master entity.
+	 * @param sk The SK to retrieve JSON data from Employee_Master entity.
+	 * @return A JSON string containing key-value pairs mapped according to sequence numbers and extracted from JSON data.
+	 */
+	public String getjsons(Integer id,String sk) {
+		// TODO Auto-generated method stub
+		 List<Sequence_M> seqMasterEntities = dynamoDBMapper.scan(Sequence_M.class, new DynamoDBScanExpression());
+	        
+	        List<Sequence_M> sortedSequenceEntities = seqMasterEntities.stream()
+	                .sorted(Comparator.comparingInt(Sequence_M::getSeqNo)).collect(Collectors.toList());
+
+	        // Construct output JSON
+	        StringBuilder output = new StringBuilder("OUT_JSON {{");
+	        for (Sequence_M sequenceEntity : sortedSequenceEntities) {
+	            String key = sequenceEntity.getKey();
+	            String value = "";
+
+	            // Load JSON string by ID
+	            String json = getJsonById(id,sk);
+	            
+	            if (json != null) {
+	                // Extract value from JSON
+	                value = getValueFromJsons(json, key);
+	            }
+	            // Append key-value pair to output
+	            output.append(key).append(":").append(value).append(",");
+	        }
+	        // Remove trailing comma and append closing bracket
+	        output.deleteCharAt(output.length() - 1);
+	        output.append("}}");
+
+	        return output.toString();
+	}
+	/**
+	 * Retrieves the JSON data associated with the specified ID and SK from the Employee_Master entity.
+	 *
+	 * @param id The ID of the Employee_Master entity.
+	 * @param sk The SK of the Employee_Master entity.
+	 * @return The JSON data associated with the specified ID and SK, or null if no data is found or if there is an error.
+	 */
+	private String getJsonById(Integer id, String sk) {
+		// TODO Auto-generated method stub
+		  try {
+	            Employee_Master employeeEntity = dynamoDBMapper.load(Employee_Master.class, id,sk);
+	            if (employeeEntity != null) {
+	                return employeeEntity.getJson();
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	}
+
+	
+	/**
+	 * Retrieves a list of Sequence_M objects from the DynamoDB database using a query expression
+	 * based on the provided ID and SK values, and returns the result.
+	 *
+	 * @return A list of Sequence_M objects retrieved from the DynamoDB database.
+	 */
+	public List<Sequence_M> getEmployeeAllemp() {
+		// TODO Auto-generated method stub
+//		DynamoDBQueryExpression<Sequence_M> queryExpression = new DynamoDBQueryExpression<>();
+//        List<Sequence_M> result = dynamoDBMapper.query(Sequence_M.class, queryExpression);
+//        return result;
+		Sequence_M em= new Sequence_M();
+		 Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+	        expressionAttributeValues.put(":idValue", new AttributeValue().withN(Integer.toString(1))); // Define the attribute value for id
+	        expressionAttributeValues.put(":skValue", new AttributeValue().withS("B")); // Define the attribute value for sk
+	         
+	        // Define the query expression
+	        DynamoDBQueryExpression<Sequence_M> queryExpression = new DynamoDBQueryExpression<Sequence_M>()
+	                .withKeyConditionExpression("  sk = :skValue  AND id = :idValue") // Include both hash and range keys
+	                .withExpressionAttributeValues(expressionAttributeValues); // Set the expression attribute values
+
+	        // Execute the query
+	        List<Sequence_M> latestReplies = dynamoDBMapper.query(Sequence_M.class, queryExpression);
+
+	        return latestReplies;
+		
+		
+		
+		
+//		DynamoDBQueryExpression<Sequence_M> queryExpression = new DynamoDBQueryExpression<Sequence_M>();
+//		
+//		List<Sequence_M> allRecords = dynamoDBMapper.query(Sequence_M.class, queryExpression);
+//
+//	    return allRecords;
+		
+		
+		
+		
+//		   Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+//	        expressionAttributeValues.put(":typeValue", new AttributeValue().withS("")); // Assuming type is a string
+//
+//	        DynamoDBQueryExpression<Sequence_M> queryExpression = new DynamoDBQueryExpression<Sequence_M>()
+//	                .withKeyConditionExpression("#type = :typeValue")
+//	                .withExpressionAttributeNames(Collections.singletonMap("#type", "type"))
+//	                .withExpressionAttributeValues(expressionAttributeValues);
+//
+//	        // Execute the query to retrieve all records matching the condition
+//	        List<Sequence_M> allRecords = dynamoDBMapper.query(Sequence_M.class, queryExpression);
+//
+//	        return allRecords;
+		
+	}
+
+	
+	
+//	private String getValueFromJsonss(String json, String key) {
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode rootNode = objectMapper.readTree(json);
+//            JsonNode valueNode = rootNode.get(key);
+//
+//            if (valueNode != null) {
+//                return valueNode.asText();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+//	private Object getValueFromJson(String json, String key) {
+//		// TODO Auto-generated method stub
+//		 try {
+//		        // Create ObjectMapper instance
+//		        ObjectMapper objectMapper = new ObjectMapper();
+//
+//		        // Parse JSON string to JsonNode
+//		        JsonNode rootNode = objectMapper.readTree(json);
+//
+//		        // Get value corresponding to the key
+//		        JsonNode valueNode = rootNode.get(key);
+//
+//		        // Check if valueNode is not null and return its text value
+//		        if (valueNode != null) {
+//		            return valueNode.asText();
+//		        }
+//		    } catch (Exception e) {
+//		        // Handle JSON parsing exceptions
+//		        e.printStackTrace(); // You should handle exceptions appropriately in your application
+//		    }
+//		    return null; 
+//	}
+
+//	public Map<String, Object> fetchAndSortRecords(int employeeId) {
+//		// TODO Auto-generated method stub
+//		 Sequence_Master sequenceMaster = dynamoDBMapper.load(Sequence_Master.class, employeeId);;
+//	        if (sequenceMaster != null) {
+//	            List<Integer> seqNo = sequenceMaster.getSeqNo();
+//	            Map<String, Object> record = new LinkedHashMap<>();
+//
+//	            for (int i = 0; i < sequence.size(); i++) {
+//	                int seqIndex = sequence.get(i) - 1; // Adjust index to start from 0
+//	                if (seqIndex >= 0 && seqIndex < seqNo.size()) {
+//	                    int fieldIndex = seqNo.indexOf(sequence.get(i));
+//	                    switch (fieldIndex) {
+//	                        case 0:
+//	                            record.put("FirstName", "Some Value"); // Retrieve value from DynamoDB
+//	                            break;
+//	                        case 1:
+//	                            record.put("MiddleName", "Some Value"); // Retrieve value from DynamoDB
+//	                            break;
+//	                        case 2:
+//	                            record.put("LastName", "Some Value"); // Retrieve value from DynamoDB
+//	                            break;
+//	                        // Add cases for additional fields if needed
+//	                    }
+//	                }
+//	            }
+//	            return record;
+//	        }
+//	        return null;
+//	    }
+//	}
+	
+	
+	
+	
+
+//	private List<Employee> second(String searchValue) {
+//		// TODO Auto-generated method stub
+//		
+//		List<Employee> emp=firstName(searchValue);
+//		
+//		if(emp==null) {
+//			
+//			return null;
+//			
+//			
+//		}else {
+//			DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//					.withIndexName("LastNameIndex") // Assuming you have an index on the firstName attribute
+//					.withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//					.withKeyConditionExpression("lastName = :val").withExpressionAttributeValues(
+//							Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//			return dynamoDBMapper.query(Employee.class, queryExpression);
+//		}
+//		
+//	}
+//
+//	private List<Employee> firstName(String searchValue) {
+//		// TODO Auto-generated method stub
+//		DynamoDBQueryExpression<Employee> queryExpression = new DynamoDBQueryExpression<Employee>()
+//				.withIndexName("FirstNameIndex") // Assuming you have an index on the firstName attribute
+//				.withConsistentRead(false) // Set this to true if you want a strongly consistent read
+//				.withKeyConditionExpression("firstName = :val").withExpressionAttributeValues(
+//						Collections.singletonMap(":val", new AttributeValue().withS(searchValue)));
+//
+//		return dynamoDBMapper.query(Employee.class, queryExpression);
+//	}
+}

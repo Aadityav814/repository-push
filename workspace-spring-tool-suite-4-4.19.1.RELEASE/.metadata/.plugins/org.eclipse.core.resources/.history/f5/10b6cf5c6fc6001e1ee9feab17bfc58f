@@ -1,0 +1,133 @@
+package com.excel.demoproject.repository;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.excel.demoproject.dto.MasterResdto;
+import com.excel.demoproject.entity.EmpDetails;
+
+import io.micrometer.common.util.StringUtils;
+
+@org.springframework.stereotype.Service
+public class Servicess {
+	
+	
+	@Autowired
+	MasterRepo ex;
+	private static final String EXCEL_EXTENSION = ".xlsx";
+	
+	public boolean isValidExcelFile(MultipartFile file) {
+		// TODO Auto-generated method stub
+		String originalFilename = file.getOriginalFilename();
+
+		return (originalFilename != null && originalFilename.toLowerCase().endsWith(EXCEL_EXTENSION));
+	}
+	private boolean checkIfRowIsEmpty(Row row) {
+		if (row == null) {
+			return true;
+		}
+		if (row.getLastCellNum() <= 0) {
+			return true;
+		}
+		for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
+			Cell cell = row.getCell(cellNum);
+			if (cell != null && cell.getCellType() != CellType.BLANK && StringUtils.isNotBlank(cell.toString())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	public ResponseEntity<MasterResdto> readExce(MultipartFile file) {
+		// TODO Auto-generated method stub
+
+		if (file == null || file.isEmpty()) {
+			MasterResdto res = new MasterResdto();
+			res.setMessage("File is null or empty");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+		}
+
+		List<EmpDetails> list = new ArrayList<>();
+		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+			Sheet sheet = workbook.getSheetAt(0);
+			int rowNumber = 0;
+			Iterator<Row> rowIterator = sheet.iterator();
+
+			while (rowIterator.hasNext()) {
+				Row row = rowIterator.next();
+				Boolean isRowEmpty = checkIfRowIsEmpty(row);
+
+				if (isRowEmpty) {
+					MasterResdto res = new MasterResdto();
+					res.setMessage("Data not found");
+					return ResponseEntity.status(HttpStatus.OK).body(res);
+				}
+
+				if (rowNumber == 0) {
+					rowNumber++;
+					continue;
+				}
+
+				Iterator<Cell> cellIterator = row.cellIterator();
+				EmpDetails dto = new EmpDetails();
+
+				if (cellIterator.hasNext()) {
+					dto.setFirstName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setLastName(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setEmail(cellIterator.next().toString());
+				}
+				if (cellIterator.hasNext()) {
+					dto.setDate(cellIterator.next().toString());
+				}
+			if (cellIterator.hasNext()) {
+				dto.setStatus( (cellIterator.next().toString()));
+			}
+				list.add(dto);
+				
+			}
+			ex.saveAll(list);
+
+			MasterResdto res = new MasterResdto();
+			res.setResult(true);
+			res.setMessage("File uploaded successfully");
+			res.setStatuscode(200);
+			res.setLis(list);
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(res);
+		} catch (IOException e) {
+			// Handle the exception
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
+	public List<EmpDetails> getallrecord() {
+		// TODO Auto-generated method stub
+		
+		
+		List<EmpDetails> emp= ex.findAllByStatus("FALSE");
+	
+		
+		for (EmpDetails details:emp) {
+			
+			details.setStatus("TRUE");
+		}
+		return emp;
+	}
+
+}
